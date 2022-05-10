@@ -10,14 +10,6 @@ interface CircleButton {
     size?: number;
 }
 
-interface SearchContainer {
-    visible: boolean;
-}
-
-interface SearchInputBox {
-    borderColor?: string;
-}
-
 interface MyPageIcon {
     backgroundColor?: string;
 }
@@ -62,22 +54,6 @@ export const CircleButton = styled.TouchableOpacity`
 export const SafeAreaContainer = styled.SafeAreaView`
 `
 
-export const SearchContainer = styled(Animated.View)`
-    top: -50px;
-    width: ${Dimensions.get('screen').width}px;
-    height: 200px;
-    background:#eee;
-    align-items: center;
-    opacity: ${(props: SearchContainer) => props.visible ? 1 : 0};
-`
-
-export const SearchInputBox = styled.TextInput`
-    width:100%;
-    height:50px;
-    margin-top: 150px;
-    border: solid 2px ${(props: SearchInputBox) => props.borderColor || '#000'};
-    border-radius: 20px;
-`
 
 export const MyPageIcon = styled.View`
     width:20px;
