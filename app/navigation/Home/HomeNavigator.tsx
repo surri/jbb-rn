@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
-import { RootTabScreenProps, HomeNavigatorParams, HomeNavigationProp } from '../../types/navigation'
+import { HomeNavigatorParams } from '../../types/navigation'
 import Main from '../../screens/Home/Home'
 import { Pressable, View } from 'react-native'
 import { Text } from '../../components/Themed'
@@ -15,7 +15,7 @@ const HomeNavigator: React.FC = () => {
     const theme = useTheme()
     return (
         <HomeStack.Navigator
-            screenOptions={({ navigation }: any) => ({
+            screenOptions={({ navigation }) => ({
                 headerTransparent: true,
                 headerTitle: () => (
                     <Pressable

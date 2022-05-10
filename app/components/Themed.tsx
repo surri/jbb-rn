@@ -14,7 +14,6 @@ import {
 
 import Colors from '../theme'
 import { useTheme } from '@react-navigation/native'
-import Animated from 'react-native-reanimated'
 
 export function useThemeColor(
     props: { light?: string; dark?: string },
@@ -73,7 +72,7 @@ export function KeyboardAvoidingView(props: KeyboardAvoidingViewProps) {
     const backgroundColor = useThemeColor({ light: lightColor, dark: darkColor }, 'background')
 
     return <DefaultKeyboardAvoidingView
-        style={[{ backgroundColor, borderWidth: 2 }, style]}
+        style={[{ backgroundColor }, style]}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
         {...otherProps}

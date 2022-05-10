@@ -1,5 +1,4 @@
 import React, { Fragment } from 'react'
-import StickBanner from '../../components/Shared/StickBanner'
 import { SectionContainer, Renders, Subtitle, Title } from './styleld'
 
 const Home: React.FC = () => {

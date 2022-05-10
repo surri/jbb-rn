@@ -20,8 +20,8 @@ const Main: React.FC<Props> = () => {
     const [searchKeyword, setSearchKeyword] = useState('')
 
     const opacity = new Animated.Value(0)
-
     const scrollY = useRef(new Animated.Value(0)).current
+
     const [offsetY, setOffsetY] = useState(0)
     const [isScrollTop, setIsScrollTop] = useState(false)
 
@@ -33,7 +33,6 @@ const Main: React.FC<Props> = () => {
             useNativeDriver: true,
         }).start()
     },[searchBarActive])
-
 
     const onSearch = () => {
         console.log('onSearch')
