@@ -74,7 +74,6 @@ export function KeyboardAvoidingView(props: KeyboardAvoidingViewProps) {
     return <DefaultKeyboardAvoidingView
         style={[{ backgroundColor }, style]}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
         {...otherProps}
     />
 }

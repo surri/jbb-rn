@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Animated, NativeScrollEvent, NativeSyntheticEvent, SafeAreaView } from 'react-native'
+import { Animated, NativeScrollEvent, NativeSyntheticEvent, Platform, SafeAreaView } from 'react-native'
 import styled from 'styled-components/native'
 import SearchBar from '../../components/Header/SearchBar'
 import { KeyboardAvoidingView, View, Text, TouchableOpacity } from '../../components/Themed'
@@ -54,8 +54,18 @@ const Main: React.FC<Props> = () => {
     )
 
     return (
-        <SafeAreaView style={{ flex: 1 }}>
-            <KeyboardAvoidingView style={{ flexGrow: 1 }}>
+        <KeyboardAvoidingView
+            style={{ flexGrow: 1 }}
+            keyboardVerticalOffset={
+                Platform.select({
+                    ios: 0,
+                    android: 200,
+                })
+            }
+        >
+            <SafeAreaView
+                style={{ flex: 1 }}
+            >
                 { searchBarActive ? (
                     <SearchBoardScrollView
                         style={{ opacity }}
@@ -112,8 +122,8 @@ const Main: React.FC<Props> = () => {
                     setSearchKeyword={setSearchKeyword}
                     onSubmit={onSearch}
                 />
-            </KeyboardAvoidingView>
-        </SafeAreaView>
+            </SafeAreaView>
+        </KeyboardAvoidingView>
     )
 }
 

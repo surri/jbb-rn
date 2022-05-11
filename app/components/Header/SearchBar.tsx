@@ -3,8 +3,6 @@ import { useTheme } from '@react-navigation/native'
 import styled from 'styled-components/native'
 import { Entypo } from '@expo/vector-icons'
 import { Animated } from 'react-native'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { View } from '../Themed'
 
 interface ISearchBar {
     setSearchBarActive:(active: boolean) => void;
@@ -45,27 +43,25 @@ const SearchBar: React.FC<ISearchBar> = ({
     },[visible])
 
     return (
-        <SearchContainer>
-            <SearchAnimatedContainer
-                style={{
-                    opacity,
-                    height,
-                    backgroundColor: theme.colors.background,
-                }}
-            >
-                <SearchIcon name="magnifying-glass" size={24} color={theme.colors.text} />
-                <SearchInputBox
-                    onFocus={() => setSearchBarActive(true)}
-                    onBlur={() => setSearchBarActive(false)}
-                    color={theme.colors.text}
-                    onChangeText={(value) => setSearchKeyword(value)}
-                    placeholder={'Search'}
-                    placeholderTextColor={theme.colors.inactive}
-                    onSubmitEditing={onSubmit}
-                />
+        <SearchAnimatedContainer
+            style={{
+                opacity,
+                height,
+                backgroundColor: theme.colors.background,
+            }}
+        >
+            <SearchIcon name="magnifying-glass" size={24} color={theme.colors.text} />
+            <SearchInputBox
+                onFocus={() => setSearchBarActive(true)}
+                onBlur={() => setSearchBarActive(false)}
+                color={theme.colors.text}
+                onChangeText={(value) => setSearchKeyword(value)}
+                placeholder={'Search'}
+                placeholderTextColor={theme.colors.inactive}
+                onSubmitEditing={onSubmit}
+            />
 
-            </SearchAnimatedContainer>
-        </SearchContainer>
+        </SearchAnimatedContainer>
     )
 }
 
@@ -76,11 +72,7 @@ type ITextInputStyle = {
     containerWidth?: string,
 }
 
-const SearchContainer = styled(View)`
-`
-
 const SearchAnimatedContainer = styled(Animated.View)`
-    height: 200px;
     flex-direction: row;
     justify-content: center;
     align-items: center;
@@ -101,9 +93,7 @@ const SearchInputBox = styled.TextInput`
     flex: 1;
     padding: 10px 10px 10px 0;
     color: ${(props:ITextInputStyle) => `${props.color}`};
-    font-size: 20px;
     font-weight: bold;
-    background-color: ${(props:ITextInputStyle) => `${props.backgroundColor}`};
 `
 
 export default SearchBar
