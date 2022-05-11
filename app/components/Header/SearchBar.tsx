@@ -20,14 +20,13 @@ const SearchBar: React.FC<ISearchBar> = ({
     visible,
 }: ISearchBar) => {
     const theme = useTheme()
-    const insets = useSafeAreaInsets()
 
     const offset = useRef(new Animated.Value(0)).current
     const opacity = useRef(new Animated.Value(0)).current
 
     const height = offset.interpolate({
         inputRange: [0, 10],
-        outputRange: [0, insets.top],
+        outputRange: [0, 48],
         extrapolate: 'clamp',
     })
 
