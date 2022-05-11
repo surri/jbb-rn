@@ -2,11 +2,10 @@ import * as React from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { TabNavigatorParams } from '../../types/navigation'
 
-import HomeNavigator from '../Home/HomeNavigator'
 import SettingsNavigator from '../Settings/SettingsNavigator'
 
 import styled from 'styled-components/native'
-import { FontAwesome, Entypo, Feather } from '@expo/vector-icons'
+import { Entypo, Feather } from '@expo/vector-icons'
 import TextStyles from '../../components/styled/TextStyles'
 import { useTheme } from '@react-navigation/native'
 import SearchNavigator from '../Search/SearchNavigator'
@@ -34,9 +33,10 @@ const BottomTabNavigator: React.FC = () => {
                     backgroundColor: theme.colors.background,
                 },
                 tabBarIcon: ({ color }) => {
-                    if (route.name === 'Home') {
-                        return  <Feather size={24} name="home" color={color} />
-                    } else if (route.name === 'Search'){
+                    // if (route.name === 'Home') {
+                    //     return  <Feather size={24} name="home" color={color} />
+                    // } else
+                    if (route.name === 'Search'){
                         return <Entypo name="magnifying-glass" size={24} color={color} />
                     } else if (route.name === 'Settings'){
                         return  <Feather name="settings" size={24} color={color}/>
@@ -44,13 +44,13 @@ const BottomTabNavigator: React.FC = () => {
                 },
             })}
         >
-            <Tab.Screen
+            {/* <Tab.Screen
                 name="Home"
                 component={HomeNavigator}
                 options={{
                     tabBarLabel: () => <TabBarLabel color={theme.colors.text}>홈</TabBarLabel>,
                 }}
-            />
+            /> */}
             <Tab.Screen
                 name="Search"
                 component={SearchNavigator}
