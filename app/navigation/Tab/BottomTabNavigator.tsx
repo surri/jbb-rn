@@ -16,7 +16,7 @@ type TabBarLabel = {
     color?: string;
 }
 
-const TabBarLabel = styled(TextStyles.R2014)`
+const TabBarLabel = styled(TextStyles.Regular)`
     color: ${(props: TabBarLabel) => props.color || '#000'};
 `
 

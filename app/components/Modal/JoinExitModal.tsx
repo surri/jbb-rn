@@ -40,7 +40,7 @@ const Conatiner = styled.View`
     background-color: #ffffff;
 `
 
-const ModalText = styled(TextStyles.M3214)`
+const ModalText = styled(TextStyles.Regular)`
     color: black;
 `
 

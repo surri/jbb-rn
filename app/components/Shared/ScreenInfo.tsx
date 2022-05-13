@@ -12,8 +12,8 @@ const PrimaryContainer = styled.View`
     border-bottom-width: 2px;
     border-bottom-color: ${(props: IButtonStyle) => props.borderColor || '#ffffff'};
 `
-const PrimaryText = styled(TextStyles.M3814)`
-    font-weight: bold;
+const PrimaryText = styled(TextStyles.Bold)`
+    font-size: 20px;
 `
 
 type IButtonStyle = {

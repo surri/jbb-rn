@@ -16,7 +16,7 @@ const BottomButton = styled(TouchableOpacity)`
     border-width: 4px;
 `
 
-const BottomText = styled(TextStyles.M4214)`
+const BottomText = styled(TextStyles.Medium)`
     font-weight: 700;
 `
 
@@ -26,8 +26,8 @@ const Jangbibbal = styled.View`
     align-items: center;
 `
 
-const JangbibbalText = styled(TextStyles.M8014)`
-    font-weight: 700;
+const JangbibbalText = styled(TextStyles.Bold)`
+    font-size: 32px;
 `
 
 const Main: React.FC = () => {

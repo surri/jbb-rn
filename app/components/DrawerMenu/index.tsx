@@ -20,7 +20,7 @@ const SettingsContainer = styled.View`
     padding: 0 24px;
 `
 
-const SettingsTitle = styled(TextStyles.R4214)`
+const SettingsTitle = styled(TextStyles.Regular)`
     color: ${(props: SettingsTitle) => props.color || '#000'};
     padding: 32px 0;
 `
@@ -28,7 +28,7 @@ const SettingsTitle = styled(TextStyles.R4214)`
 const SettingMenu = styled.TouchableOpacity`
 `
 
-const MenuLabel = styled(TextStyles.R3214)`
+const MenuLabel = styled(TextStyles.Regular)`
     color: ${(props: MenuLabel) => props.color || '#000'};
 `
 

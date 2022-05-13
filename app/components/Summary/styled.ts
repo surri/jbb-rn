@@ -41,15 +41,15 @@ export const SportsImage = styled.Image`
     margin-right: 24px;
 `
 
-export const SportsName = styled(TextStyles.M2414)`
+export const SportsName = styled(TextStyles.Medium)`
     padding-bottom: 4px;
 `
 
-export const SportsAddress = styled(TextStyles.R2214)`
+export const SportsAddress = styled(TextStyles.Regular)`
     color: #333333;
 `
 
-export const SummaryName = styled(TextStyles.R2214)`
+export const SummaryName = styled(TextStyles.Regular)`
     color: #777777;
 `
 
@@ -79,18 +79,18 @@ export const SafeAreaContainer = styled.SafeAreaView`
     align-items: center;
 `
 
-export const MemberTotal = styled(TextStyles.L2414)`
+export const MemberTotal = styled(TextStyles.Regular)`
     padding-bottom: 4px;
 `
 
 
-export const SportsMemberName = styled(TextStyles.R2414)`
+export const SportsMemberName = styled(TextStyles.Regular)`
 `
 
-export const SportsMemberInfo = styled(TextStyles.L2414)`
+export const SportsMemberInfo = styled(TextStyles.Regular)`
 `
 
-export const MasterBadge = styled(TextStyles.B2414)`
+export const MasterBadge = styled(TextStyles.Bold)`
     color: #0056A4;
     margin-left: 12px;
 `

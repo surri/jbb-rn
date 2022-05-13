@@ -30,19 +30,19 @@ const RowInfo = styled.View`
 `
 
 
-const SportsPostTitle = styled(TextStyles.B2414)`
+const SportsPostTitle = styled(TextStyles.Bold)`
 
 `
-const SportsPostNickName = styled(TextStyles.R2414)`
+const SportsPostNickName = styled(TextStyles.Regular)`
     flex: 1;
 `
-const SportsPostRegistAt= styled(TextStyles.R2414)`
+const SportsPostRegistAt= styled(TextStyles.Regular)`
     flex: 2;
 `
-const SportsPostViews = styled(TextStyles.R2414)`
+const SportsPostViews = styled(TextStyles.Regular)`
     flex: 1;
 `
-const SportsPostCommentsCount= styled(TextStyles.R2414)`
+const SportsPostCommentsCount= styled(TextStyles.Regular)`
     flex: 2;
 `
 

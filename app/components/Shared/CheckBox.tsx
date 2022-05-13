@@ -9,10 +9,10 @@ const CheckItem = styled.View`
     margin: 12px 0;
     justify-content: space-between;
 `
-const CheckItemLabel = styled(TextStyles.R3814)`
+const CheckItemLabel = styled(TextStyles.Regular)`
     color: #333333;
 `
-const CheckItemRequire = styled(TextStyles.R3814)`
+const CheckItemRequire = styled(TextStyles.Regular)`
     color: #7e7e7e;
 `
 const CheckItemCircle = styled.View`

@@ -24,7 +24,7 @@ const TextWrap = styled.View`
     justify-content: flex-end;
 `
 
-const CheckAllLabel = styled(TextStyles.R3214)`
+const CheckAllLabel = styled(TextStyles.Regular)`
     font-weight: bold;
 `
 const CheckAllButton = styled.TouchableOpacity`

@@ -17,7 +17,7 @@ const MorePostButton = styled.TouchableOpacity`
     border-color: #dbdbdb;
 `
 
-const MorePostText = styled(TextStyles.R2414)`
+const MorePostText = styled(TextStyles.Regular)`
 `
 
 const MorePost: React.FC = () => {

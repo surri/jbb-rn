@@ -13,7 +13,7 @@ const TagsContainer = styled.View`
 const TitleContainer = styled.View`
 `
 
-const SettingTitle = styled(TextStyles.R4214)`
+const SettingTitle = styled(TextStyles.Regular)`
     margin-top: 8px;
     color: #ffffff;
 `
@@ -25,12 +25,12 @@ const DetailRow = styled.View`
     padding-bottom: 16px;
 `
 
-const DetailSubject = styled(TextStyles.R2414)`
+const DetailSubject = styled(TextStyles.Regular)`
     margin-top: 8px;
     color: #8966ff;
 `
 
-const DetailContens = styled(TextStyles.R3214)`
+const DetailContens = styled(TextStyles.Regular)`
     margin-top: 8px;
     color: #333333;
 `

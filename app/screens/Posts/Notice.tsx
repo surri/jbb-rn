@@ -2,8 +2,6 @@ import React, { useState } from 'react'
 import { View } from 'react-native'
 import styled from 'styled-components/native'
 import TextStyles from '../../components/styled/TextStyles'
-import PostCard from '../../components/Card/PostCard'
-import PartitionPost from '../../components/Shared/PartitionPost'
 
 const PostContainer = styled.FlatList`
     padding: 0 24px;
@@ -13,7 +11,7 @@ const PostTitleContainer = styled.View`
     margin: 32px 0;
 `
 
-const PostTitle = styled(TextStyles.R4214)`
+const PostTitle = styled(TextStyles.Regular)`
     margin-top: 8px;
     color: #333;
 `
@@ -59,10 +57,10 @@ const Notice: React.FC = () => {
             renderItem={({ item, index })=> {
                 return (
                     <View key={index}>
-                        {index > 0 && <PartitionPost />}
+                        {/* {index > 0 && <PartitionPost />}
                         <PostCard
                             post={item}
-                        />
+                        /> */}
                     </View>
                 )
             }}

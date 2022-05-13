@@ -14,10 +14,10 @@ const PrimaryTouchable = styled(TouchableOpacity)`
     border-width: 4px;
     border-color: ${(props: IButtonStyle) => props.borderColor};
 `
-const PrimaryText = styled(TextStyles.M3814)`
+const PrimaryText = styled(TextStyles.Bold)`
+    font-size: 20px;
     opacity: 0.4;
     opacity: ${(props: IButtonStyle) => props.opacity};
-    font-weight: bold;
 `
 
 type IButtonStyle = {

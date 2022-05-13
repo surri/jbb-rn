@@ -28,7 +28,7 @@ const RadioSelected= styled.View`
     border-radius: 6px;
     background-color: ${(props: IRadioStyle) => props.color || '#000'};
 `
-const RadioLabel= styled(TextStyles.R3814)`
+const RadioLabel= styled(TextStyles.Regular)`
     color: #333333;
 `
 

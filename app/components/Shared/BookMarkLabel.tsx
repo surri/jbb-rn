@@ -47,7 +47,7 @@ const BookMarkTriangle = styled.View`
     height: ${(props: LabelStyle) => props.height || 26}px;
     transform: rotate(45deg);
 `
-const BooMarkText = styled(TextStyles.R2014)`
+const BooMarkText = styled(TextStyles.Regular)`
     color: ${(props: LabelStyle) => props.color || '#00AC69'};
 `
 
