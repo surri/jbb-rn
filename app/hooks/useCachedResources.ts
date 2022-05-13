@@ -1,5 +1,5 @@
 import { FontAwesome } from '@expo/vector-icons'
-import * as Font from 'expo-font'
+import { useFonts, loadAsync }  from 'expo-font'
 import * as SplashScreen from 'expo-splash-screen'
 import { useEffect, useState } from 'react'
 
@@ -13,8 +13,12 @@ export default function useCachedResources() {
                 SplashScreen.preventAutoHideAsync()
 
                 // Load fonts
-                await Font.loadAsync({
+                await loadAsync({
                     ...FontAwesome.font,
+                    'notosans': require('../../assets/fonts/NotoSansKR-Regular.otf'),
+                    'notosans-medium': require('../../assets/fonts/NotoSansKR-Medium.otf'),
+                    'notosans-bold': require('../../assets/fonts/NotoSansKR-Bold.otf'),
+                    'notosans-light': require('../../assets/fonts/NotoSansKR-Light.otf'),
                     'space-mono': require('../../assets/fonts/SpaceMono-Regular.ttf'),
                 })
             } catch (e) {
