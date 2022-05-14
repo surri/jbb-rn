@@ -78,4 +78,20 @@ export function KeyboardAvoidingView(props: KeyboardAvoidingViewProps) {
     />
 }
 
+export function Card(props: ViewProps) {
+    const { style, lightColor, darkColor, ...otherProps } = props
+    const backgroundColor = useThemeColor({ light: lightColor, dark: darkColor }, 'background')
+
+    return <DefaultView style={[{ backgroundColor }, style]} {...otherProps} />
+}
+export function Partition(props: ViewProps) {
+    const { style, lightColor, darkColor, ...otherProps } = props
+    const backgroundColor = useThemeColor({ light: lightColor, dark: darkColor }, 'inactive')
+
+    return <DefaultView style={[{ backgroundColor }, style]} {...otherProps} />
+}
+
+
+
+
 
