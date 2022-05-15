@@ -14,7 +14,10 @@ const SearchNavigator: React.FC = () => {
     return (
         <SettingsStack.Navigator
             screenOptions={({ navigation }) => ({
-                headerTransparent: true,
+                headerStyle: {
+                    shadowColor: 'transparent',
+                    backgroundColor: theme.colors.background,
+                },
                 headerTitle: () => (
                     <Pressable
                         onPress={() => navigation.navigate('Modal')}
