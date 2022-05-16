@@ -78,11 +78,11 @@ export function KeyboardAvoidingView(props: KeyboardAvoidingViewProps) {
     />
 }
 
-export function Card(props: ViewProps) {
+export function Card(props: TouchableOpacityProps) {
     const { style, lightColor, darkColor, ...otherProps } = props
     const backgroundColor = useThemeColor({ light: lightColor, dark: darkColor }, 'background')
 
-    return <DefaultView style={[{ backgroundColor }, style]} {...otherProps} />
+    return <DefaultTouchableOpacity style={[{ backgroundColor }, style]} {...otherProps} />
 }
 export function Partition(props: ViewProps) {
     const { style, lightColor, darkColor, ...otherProps } = props

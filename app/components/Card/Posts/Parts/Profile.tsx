@@ -1,11 +1,15 @@
 import styled from 'styled-components/native'
 import TextStyles from '../../../styled/TextStyles'
 
-const Profile = () => {
+type Profile = {
+    name: string,
+}
+
+const Profile = ({ name }: Profile) => {
     return (
         <Container>
             <UserImage/>
-            <UserName>크리스</UserName>
+            <UserName>{name}</UserName>
         </Container>
     )
 }

@@ -2,18 +2,12 @@ import React, { useEffect, useRef, useState } from 'react'
 import { Animated, NativeScrollEvent, NativeSyntheticEvent, Platform, RefreshControl, SafeAreaView } from 'react-native'
 import styled from 'styled-components/native'
 import { PostsPartition } from '../../components/Card/Posts/Parts'
-import PostCard from '../../components/Card/Posts/PostCard'
+import PostCard, { Post } from '../../components/Card/Posts/PostCard'
 import SearchBar from '../../components/Header/SearchBar'
 import { LoaderPostList } from '../../components/Loader/Posts'
 import { KeyboardAvoidingView, View, Text, TouchableOpacity } from '../../components/Themed'
 import { usePosts } from '../../hooks/graphql/posts'
 import useWait from '../../hooks/useWait'
-
-type Post = {
-    id: number,
-    title: string,
-    contents: string,
-}
 
 type Props = {
     posts: Post[];

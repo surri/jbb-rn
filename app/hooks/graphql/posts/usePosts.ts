@@ -14,7 +14,8 @@ query variables($sportsId: Int, $keyword: String) {
         edges {
             node {
                 title
-                contents
+                author
+                createdAt
             }
             cursor
         }
