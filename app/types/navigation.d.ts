@@ -57,6 +57,7 @@ export type  SettingsNavigatorParams = {
 
 export type  SearchNavigatorParams = {
     Main: {},
+    Show: undefined,
 }
 
 export type  AuthNavigatorParams = {
