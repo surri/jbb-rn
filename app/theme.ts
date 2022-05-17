@@ -5,6 +5,7 @@ const light = {
     text: '#000000',
     border: '#000000',
     inactive: '#4e4e4e4e',
+    placeHolder: '#999999',
     notification: '#ff1521',
 }
 
@@ -15,6 +16,7 @@ const dark = {
     text: '#ffffff',
     border: '#ffffff',
     inactive: '#4e4e4eee',
+    placeHolder: '#999999',
     notification: '#ff1521',
 }
 

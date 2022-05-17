@@ -1,32 +1,33 @@
 import { gql, useQuery } from '@apollo/client'
 
 const POSTS_QUERY = gql`
-query variables($sportsId: Int, $keyword: String) {
-    posts(
-        sportsId: $sportsId
-        conditions:{
-            pagination: {
-                first: 10
+    query usePosts($sportsId: Int, $keyword: String) {
+        posts(
+            sportsId: $sportsId
+            conditions:{
+                pagination: {
+                    first: 10
+                }
+                keyword: $keyword
             }
-            keyword: $keyword
-        }
-    ) {
-        edges {
-            node {
-                title
-                author
-                createdAt
+        ) {
+            edges {
+                node {
+                    id
+                    title
+                    author
+                    createdAt
+                }
+                cursor
             }
-            cursor
-        }
-        pageInfo {
-            startCursor
-            endCursor
-            hasPrevPage
-            hasNextPage
+            pageInfo {
+                startCursor
+                endCursor
+                hasPrevPage
+                hasNextPage
+            }
         }
     }
-}
 `
 
 type Virables = {

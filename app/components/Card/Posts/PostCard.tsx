@@ -15,6 +15,7 @@ export type Post = {
     contents: string,
     author: string,
     createdAt: string,
+    userId: number,
 }
 
 interface IProps {
@@ -35,7 +36,7 @@ const PostCard: React.FC<IProps> = ({ post }: IProps) => {
 
     return (
         <Container
-            onPress={() => navigation.navigate('Show')}
+            onPress={() => navigation.navigate('Show', { post: post.node })}
         >
             <ThumbnailContainer>
                 <Thumbnail/>

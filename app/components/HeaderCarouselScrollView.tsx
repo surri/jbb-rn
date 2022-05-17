@@ -6,7 +6,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context'
 import Carousel, { Pagination } from 'react-native-snap-carousel'
 import { SearchNavigatorParams } from '../types/navigation'
 
-const HeaderCarouselScrollView = ({ images, data, renderItem }: any) => {
+const HeaderCarouselScrollView = ({ images, childComponents, data, renderItem }: any) => {
     const navigation = useNavigation<StackNavigationProp<SearchNavigatorParams>>()
     const width = Dimensions.get('window').width
     const [activeIndex, setActiveIndex] = useState(0)
@@ -104,6 +104,7 @@ const HeaderCarouselScrollView = ({ images, data, renderItem }: any) => {
                                 inactiveDotOpacity={1}
                                 inactiveDotScale={1}
                             />
+                            {childComponents}
                         </Animated.View>
                     </Fragment>
                 }

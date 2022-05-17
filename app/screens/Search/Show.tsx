@@ -1,44 +1,43 @@
-import React from 'react'
+import { RouteProp } from '@react-navigation/native'
+import React, { useEffect, useState } from 'react'
+import { Post } from '../../components/Card/Posts/PostCard'
+import { PostContents } from '../../components/Contents'
 import HeaderCarouselScrollView from '../../components/HeaderCarouselScrollView'
-import { Text, View } from '../../components/Themed'
+import { LoaderPostShow } from '../../components/Loader/Posts'
+import usePostShow from '../../hooks/graphql/posts/usePost'
+import { SearchNavigatorParams } from '../../types/navigation'
 
+type Props = {
+    route: RouteProp<SearchNavigatorParams, 'Show'>
+}
 
-const Show = () => {
-    const renderItem = ({ item }: any) => (
-        <View style={{ margin: 32 }} >
-            <Text style={{ fontSize: 32 }}>{item.title}</Text>
-        </View>
-    )
+const Show: React.FC<Props> = ({ route }: Props) => {
+    const { post: postParam } = route.params
+    const [post, setPost] = useState<Post>(postParam)
+    const { data, loading } = usePostShow({ id: postParam.id, userId: postParam.userId })
+
+    useEffect(() => {
+        data?.post && setPost(data.post)
+    }, [data])
+
+    const ChildComponents = () => {
+        return loading ? (
+            <LoaderPostShow />
+        ) : (
+            <PostContents post={post}/>
+        )
+    }
 
     const images = [0,1,2]
     return (
         <HeaderCarouselScrollView
             images={images}
-            data={DATA}
-            renderItem={renderItem}
-        />
+            childComponents={<ChildComponents/>}
+            // data={[]}
+            // renderItem={renderItem}
+        >
+        </HeaderCarouselScrollView>
+
     )
 }
-const DATA = [
-    {
-        id: 1,
-        title: '111111111111111111111111111111111111111111',
-    },
-    {
-        id: 2,
-        title: '222222222222222222222222222222222222222222',
-    },
-    {
-        id: 3,
-        title: '333333333333333333333333333333333333333333',
-    },
-    {
-        id: 4,
-        title: '444444444444444444444444444444444444444444',
-    },
-    {
-        id: 5,
-        title: '5555555555555555555555555555555555555555555',
-    },
-]
 export default Show
