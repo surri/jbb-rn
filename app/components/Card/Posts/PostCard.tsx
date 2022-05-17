@@ -37,7 +37,9 @@ const PostCard: React.FC<IProps> = ({ post }: IProps) => {
         <Container
             onPress={() => navigation.navigate('Show')}
         >
-            <Thumbnail/>
+            <ThumbnailContainer>
+                <Thumbnail/>
+            </ThumbnailContainer>
             <InfoContainer>
                 <ProfileRow>
                     <Profile
@@ -59,22 +61,29 @@ const PostCard: React.FC<IProps> = ({ post }: IProps) => {
 
 const Container = styled(Card)`
     flex-direction: row;
-    margin: 12px 24px;
+    align-items: center;
+    margin: 12px;
+    height: 120px;
+`
+
+const ThumbnailContainer = styled.View`
+    flex: 1;
 `
 
 const InfoContainer = styled.View`
-    flex: 1;
-    padding: 4px 12px;
+    flex: 2;
+    padding: 4px 12px 4px 20px;
     justify-content: space-between;
 `
 
 const ProfileRow = styled.View`
+    flex:1;
     flex-direction: row;
-    margin-bottom: 4px;
     justify-content: space-between;
 `
 
 const InfoRow = styled.View`
+    flex:1;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
@@ -86,12 +95,10 @@ const Row = styled.View`
 
 const Price = styled(TextStyles.Bold)`
     font-size: 16px;
-    padding-bottom: 8px;
 `
 
 const PostTitle = styled(TextStyles.Regular)`
     font-size: 16px;
-    padding-bottom: 8px;
 `
 
 const PostDate = styled(TextStyles.Regular)``

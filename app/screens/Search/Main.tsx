@@ -61,7 +61,7 @@ const Main: React.FC<Props> = () => {
                 setOffsetY(y)
                 setIsScrollTop(offsetY - y > 0 || y <= 0)
             },
-            useNativeDriver: false,
+            useNativeDriver: true,
         },
     )
 
@@ -111,7 +111,7 @@ const Main: React.FC<Props> = () => {
                             </SearchKeywordBox>
                         </SearchBoardContainer>
                     </SearchBoardScrollView>
-                ) : (
+                ) : loading ? <LoaderPostList rows={8} /> : (
                     <Animated.FlatList<Pagination<Post>>
                         contentContainerStyle={{ flexGrow: 1 }}
                         onScroll={onScroll}
@@ -123,10 +123,9 @@ const Main: React.FC<Props> = () => {
                             />
                         }
                         data={posts}
-                        // data={[]}
                         renderItem={({ item }) => <PostCard post={item} />}
                         ItemSeparatorComponent={() => <PostsPartition/>}
-                        ListEmptyComponent={<LoaderPostList rows={8} />}
+                        // ListEmptyComponent={<LoaderPostList rows={8} />}
                     />
                 )}
                 <SearchBar

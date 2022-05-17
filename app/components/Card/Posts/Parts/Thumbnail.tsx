@@ -2,13 +2,13 @@ import styled from 'styled-components/native'
 
 const Thumbnail = () => {
     return (
-        <Container/>
+        <Container></Container>
     )
 }
 
 const Container = styled.View`
-    width: 100px;
-    height: 100px;
+    width: 120px;
+    height: 120px;
     border-radius: 20px;
     background-color: #B4B4B444;
 `

@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react'
 import { useTheme } from '@react-navigation/native'
 import styled from 'styled-components/native'
 import { Entypo } from '@expo/vector-icons'
-import { Animated } from 'react-native'
+import { Animated, Easing } from 'react-native'
 
 interface ISearchBar {
     setSearchBarActive:(active: boolean) => void;
@@ -19,25 +19,33 @@ const SearchBar: React.FC<ISearchBar> = ({
 }: ISearchBar) => {
     const theme = useTheme()
 
-    const offset = useRef(new Animated.Value(0)).current
+    const translateY = useRef(new Animated.Value(0)).current
     const opacity = useRef(new Animated.Value(0)).current
+    const easeOutBounce = (x: number): number => {
+        const n1 = 7.5625
+        const d1 = 2.75
 
-    const height = offset.interpolate({
-        inputRange: [0, 10],
-        outputRange: [0, 48],
-        extrapolate: 'clamp',
-    })
-
+        if (x < 1 / d1) {
+            return n1 * x * x
+        } else if (x < 2 / d1) {
+            return n1 * (x -= 1.5 / d1) * x + 0.75
+        } else if (x < 2.5 / d1) {
+            return n1 * (x -= 2.25 / d1) * x + 0.9375
+        } else {
+            return n1 * (x -= 2.625 / d1) * x + 0.984375
+        }
+    }
     useEffect(() => {
         Animated.parallel([
-            Animated.timing(offset, {
-                toValue: visible ? 10 : 0,
+            Animated.timing(translateY, {
+                toValue: visible ?  0: 200,
                 duration: 400,
-                useNativeDriver: false,
+                easing: easeOutBounce,
+                useNativeDriver: true,
             }),
             Animated.timing(opacity, {
                 toValue: visible ? 1 : 0,
-                useNativeDriver: false,
+                useNativeDriver: true,
             }),
         ]).start()
     },[visible])
@@ -46,7 +54,7 @@ const SearchBar: React.FC<ISearchBar> = ({
         <SearchAnimatedContainer
             style={{
                 opacity,
-                height,
+                transform: [{ translateY }],
                 backgroundColor: theme.colors.background,
             }}
         >
