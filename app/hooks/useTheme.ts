@@ -10,6 +10,7 @@ declare module '@react-navigation/native' {
             text: string,
             border: string,
             inactive: string,
+            placeHolder: string,
             notification: string,
         };
     };

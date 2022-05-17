@@ -9,6 +9,7 @@ import {
     ScrollView as DefaultScrollView,
     TouchableOpacity as DefaultTouchableOpacity,
     KeyboardAvoidingView as DefaultKeyboardAvoidingView,
+    TextInput as DefaultTextInput,
     Platform,
 } from 'react-native'
 
@@ -40,6 +41,7 @@ export type ViewProps = ThemeProps & DefaultView['props'];
 export type ScrollViewProps = ThemeProps & DefaultScrollView['props'];
 export type TouchableOpacityProps = ThemeProps & DefaultTouchableOpacity['props'];
 export type KeyboardAvoidingViewProps = ThemeProps & DefaultKeyboardAvoidingView['props'];
+export type TextInputProps = ThemeProps & DefaultTextInput['props'];
 
 export function Text(props: TextProps) {
     const { style, lightColor, darkColor, ...otherProps } = props
@@ -89,6 +91,26 @@ export function Partition(props: ViewProps) {
     const backgroundColor = useThemeColor({ light: lightColor, dark: darkColor }, 'inactive')
 
     return <DefaultView style={[{ backgroundColor }, style]} {...otherProps} />
+}
+
+export function Button(props: TouchableOpacityProps) {
+    const { style, lightColor, darkColor, ...otherProps } = props
+    const backgroundColor = useThemeColor({ light: lightColor, dark: darkColor }, 'background')
+
+    return <DefaultTouchableOpacity style={[{ backgroundColor }, style]} {...otherProps} />
+}
+
+
+export function TextInput(props: TextInputProps) {
+    const { style, lightColor, darkColor, ...otherProps } = props
+    const backgroundColor = useThemeColor({ light: lightColor, dark: darkColor }, 'background')
+    const borderColor = useThemeColor({ light: lightColor, dark: darkColor }, 'border')
+    const placeHolderTextColor = useThemeColor({ light: lightColor, dark: darkColor }, 'placeHolder')
+
+    return <DefaultTextInput
+        style={[{ backgroundColor, borderColor, borderWidth: 1 }, style]} {...otherProps}
+        placeholderTextColor={placeHolderTextColor}
+    />
 }
 
 

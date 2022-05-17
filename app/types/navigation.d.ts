@@ -3,6 +3,7 @@ import { CompositeNavigationProp, CompositeScreenProps } from '@react-navigation
 import { StackNavigationProp } from '@react-navigation/stack'
 import { BottomTabNavigationProp, BottomTabScreenProps } from '@react-navigation/bottom-tabs'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
+import { Post } from '../components/Card/Posts/PostCard'
 
 export type DrawerNavigatorParams = {
     RootNavigator: RootStackParams;
@@ -19,6 +20,7 @@ export type RootStackParams = {
 export type TabNavigatorParams = {
     Home: HomeNavigatorParams;
     Search: SearchNavigatorParams;
+    Create: undefined;
     Settings: SettingsNavigatorParams;
 }
 
@@ -32,8 +34,8 @@ BottomTabNavigationProp<TabNavigatorParams, 'Search'>,
 StackNavigationProp<RootStackParams>
 >;
 
-export type SummaryNavigationProp = CompositeNavigationProp<
-BottomTabNavigationProp<TabNavigatorParams, 'Summary'>,
+export type CreateNavigationProp = CompositeNavigationProp<
+BottomTabNavigationProp<TabNavigatorParams, 'Create'>,
 StackNavigationProp<RootStackParams>
 >;
 
@@ -51,13 +53,20 @@ export type HomeNavigatorParams = {
     Main: {},
 }
 
-export type  SettingsNavigatorParams = {
+export type SettingsNavigatorParams = {
     Main: {},
 }
 
-export type  SearchNavigatorParams = {
+export type SearchNavigatorParams = {
     Main: {},
-    Show: undefined,
+    Show: {
+        post: Post
+    },
+}
+
+export type CreateNavigatorParams = {
+    Category: undefined
+    Create: undefined
 }
 
 export type  AuthNavigatorParams = {

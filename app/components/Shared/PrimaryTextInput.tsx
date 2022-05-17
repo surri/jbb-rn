@@ -1,16 +1,7 @@
 import React from 'react'
 import styled from 'styled-components/native'
 import { TextInputProps } from 'react-native'
-import { View } from '../Themed'
 import { useTheme } from '@react-navigation/native'
-
-
-const PrimaryTextInputContainer = styled(View)`
-    width: ${(props:ITextInputStyle) => `${props.containerWidth}`};
-    margin: 12px 0;
-    border-bottom-width: 2px;
-    border-bottom-color: #00ac6a40;
-`
 
 const InputText = styled.TextInput`
     color: ${(props:ITextInputStyle) => `${props.color}`};
@@ -40,21 +31,21 @@ const PrimaryTextInput: React.FC<IProps> = ({
     onChangeText,
     value,
     placeholder,
+    placeholderTextColor,
 }: IProps) => {
     const theme = useTheme()
     return (
-        <PrimaryTextInputContainer>
-            <InputText
-                color={theme.colors.text}
-                backgroundColor={theme.colors.primary}
-                borderColor={theme.colors.border}
-                keyboardType={'phone-pad'}
-                onBlur={onBlur}
-                onChangeText={onChangeText}
-                value={value}
-                placeholder={placeholder}
-            />
-        </PrimaryTextInputContainer>
+        <InputText
+            color={theme.colors.text}
+            backgroundColor={theme.colors.background}
+            borderColor={theme.colors.border}
+            keyboardType={'phone-pad'}
+            onBlur={onBlur}
+            onChangeText={onChangeText}
+            value={value}
+            placeholder={placeholder}
+            placeholderTextColor={placeholderTextColor}
+        />
     )
 }
 

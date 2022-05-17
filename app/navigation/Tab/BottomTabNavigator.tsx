@@ -5,10 +5,11 @@ import { TabNavigatorParams } from '../../types/navigation'
 import SettingsNavigator from '../Settings/SettingsNavigator'
 
 import styled from 'styled-components/native'
-import { Entypo, Feather } from '@expo/vector-icons'
+import { Entypo, Feather, AntDesign } from '@expo/vector-icons'
 import TextStyles from '../../components/styled/TextStyles'
 import { useTheme } from '@react-navigation/native'
 import SearchNavigator from '../Search/SearchNavigator'
+import CreateNavigator from '../Create/CreateNavigator'
 
 const Tab = createBottomTabNavigator<TabNavigatorParams>()
 
@@ -31,38 +32,34 @@ const BottomTabNavigator: React.FC = () => {
                 tabBarStyle: {
                     borderTopColor: theme.colors.primary,
                     backgroundColor: theme.colors.background,
+                    paddingTop: 4,
                 },
                 tabBarIcon: ({ color }) => {
-                    // if (route.name === 'Home') {
-                    //     return  <Feather size={24} name="home" color={color} />
-                    // } else
                     if (route.name === 'Search'){
                         return <Entypo name="magnifying-glass" size={24} color={color} />
+                    } else if (route.name === 'Create') {
+                        return <AntDesign name="pluscircleo" size={24} color={color} />
                     } else if (route.name === 'Settings'){
-                        return  <Feather name="settings" size={24} color={color}/>
+                        return  <Feather name="settings" size={24} color={color} />
                     }
                 },
             })}
         >
-            {/* <Tab.Screen
-                name="Home"
-                component={HomeNavigator}
-                options={{
-                    tabBarLabel: () => <TabBarLabel color={theme.colors.text}>홈</TabBarLabel>,
-                }}
-            /> */}
             <Tab.Screen
                 name="Search"
                 component={SearchNavigator}
-                options={{
-                    tabBarLabel: () => <TabBarLabel color={theme.colors.text}>찾아보기</TabBarLabel>,
-                }}
+                options={{ tabBarLabel: '' }}
+            />
+            <Tab.Screen
+                name="Create"
+                component={CreateNavigator}
+                options={{ tabBarLabel: '' }}
             />
             <Tab.Screen
                 name="Settings"
                 component={SettingsNavigator}
                 options={{
-                    tabBarLabel: () => <TabBarLabel color={theme.colors.text}>설정</TabBarLabel>,
+                    tabBarLabel: '',
                     tabBarBadge: 3,
                 }}
             />
