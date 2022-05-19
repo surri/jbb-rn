@@ -6,22 +6,23 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { Post } from '../components/Card/Posts/PostCard'
 
 export type DrawerNavigatorParams = {
-    RootNavigator: RootStackParams;
+    RootNavigator: RootStackParams,
 }
 
 export type RootStackParams = {
-    Root: NavigatorScreenParams<TabNavigatorParams> | undefined;
-    NotFound: undefined;
-    Settings: SettingsNavigatorParams;
-    SettingsDetail: ISettings;
-    Modal: undefined;
-};
+    Root: NavigatorScreenParams<TabNavigatorParams> | undefined,
+    NotFound: undefined,
+    Settings: SettingsNavigatorParams,
+    SettingsDetail: ISettings,
+    Modal: undefined,
+}
 
 export type TabNavigatorParams = {
-    Home: HomeNavigatorParams;
-    Search: SearchNavigatorParams;
-    Create: undefined;
-    Settings: SettingsNavigatorParams;
+    Home: HomeNavigatorParams,
+    Search: SearchNavigatorParams,
+    Create: undefined,
+    Messages: MessagesNavigatorParams,
+    Profile: ProfileNavigatorParams,
 }
 
 export type HomeNavigationProp = CompositeNavigationProp<
@@ -39,8 +40,13 @@ BottomTabNavigationProp<TabNavigatorParams, 'Create'>,
 StackNavigationProp<RootStackParams>
 >;
 
-export type SettingsNavigationProp = CompositeNavigationProp<
-BottomTabNavigationProp<TabNavigatorParams, 'Settings'>,
+export type MessagesNavigationProp = CompositeNavigationProp<
+BottomTabNavigationProp<TabNavigatorParams, 'Messages'>,
+StackNavigationProp<RootStackParams>
+>;
+
+export type ProfileNavigationProp = CompositeNavigationProp<
+BottomTabNavigationProp<TabNavigatorParams, 'Profile'>,
 StackNavigationProp<RootStackParams>
 >;
 
@@ -62,6 +68,13 @@ export type SearchNavigatorParams = {
     Show: {
         post: Post
     },
+}
+export type MessagesNavigatorParams = {
+    Main: {},
+}
+
+export type ProfileNavigatorParams = {
+    Main: {},
 }
 
 export type CreateNavigatorParams = {

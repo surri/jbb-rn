@@ -96,19 +96,21 @@ export function Partition(props: ViewProps) {
 export function Button(props: TouchableOpacityProps) {
     const { style, lightColor, darkColor, ...otherProps } = props
     const backgroundColor = useThemeColor({ light: lightColor, dark: darkColor }, 'background')
+    const borderColor = useThemeColor({ light: lightColor, dark: darkColor }, 'border')
 
-    return <DefaultTouchableOpacity style={[{ backgroundColor }, style]} {...otherProps} />
+    return <DefaultTouchableOpacity style={[{ backgroundColor, borderColor, borderWidth: 2 }, style]} {...otherProps} />
 }
 
 
 export function TextInput(props: TextInputProps) {
     const { style, lightColor, darkColor, ...otherProps } = props
+    const color = useThemeColor({ light: lightColor, dark: darkColor }, 'text')
     const backgroundColor = useThemeColor({ light: lightColor, dark: darkColor }, 'background')
     const borderColor = useThemeColor({ light: lightColor, dark: darkColor }, 'border')
     const placeHolderTextColor = useThemeColor({ light: lightColor, dark: darkColor }, 'placeHolder')
 
     return <DefaultTextInput
-        style={[{ backgroundColor, borderColor, borderWidth: 1 }, style]} {...otherProps}
+        style={[{ color, backgroundColor, borderColor, borderWidth: 1, fontFamily: 'notosans'  }, style]} {...otherProps}
         placeholderTextColor={placeHolderTextColor}
     />
 }

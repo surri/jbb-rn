@@ -7,15 +7,15 @@ import { TouchableOpacity } from '../Themed'
 const PrimaryTouchable = styled(TouchableOpacity)`
     align-items: center;
     justify-content: center;
-    border-radius: 20px;
+    border-radius: 12px;
     width: 100%;
-    padding: 16px 0 18px;
-    margin: 32px 0;
-    border-width: 4px;
+    padding: 12px;
+    margin: 12px 0;
+    border-width: 2px;
     border-color: ${(props: IButtonStyle) => props.borderColor};
 `
 const PrimaryText = styled(TextStyles.Bold)`
-    font-size: 20px;
+    font-size: 18px;
     opacity: 0.4;
     opacity: ${(props: IButtonStyle) => props.opacity};
 `
