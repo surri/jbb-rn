@@ -11,7 +11,7 @@ const light = {
 
 const dark = {
     primary: '#ffffff',
-    background: '#000000',
+    background: '#303030',
     card: '#303030',
     text: '#ffffff',
     border: '#ffffff',

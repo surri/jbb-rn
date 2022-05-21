@@ -14,11 +14,11 @@ const POST_QUERY = gql`
     }
 `
 
-type Virables = {
+type Variables = {
     id: number,
     userId: number
 }
 
-export default function usePostShow(variables: Virables) {
+export default function usePostShow(variables: Variables) {
     return useQuery(POST_QUERY, { variables })
 }

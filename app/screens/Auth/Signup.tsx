@@ -3,14 +3,13 @@ import PrimaryButton from '../../components/Shared/PrimaryButton'
 import styled from 'styled-components/native'
 import ScreenInfo from '../../components/Shared/ScreenInfo'
 import PhoneNumberInput from '../../components/Auth/PhoneNumberInput'
-import { StackNavigationProp } from '@react-navigation/stack'
-import { RootStackParams } from '../../types/navigation'
-import { useNavigation, useTheme } from '@react-navigation/native'
+import { useNavigation } from '@react-navigation/native'
 import ConfirmInput from '../../components/Auth/ConfirmInput'
 import { Animated } from 'react-native'
-import { useRecoilState } from 'recoil'
-import { loginState } from '../../recoil/selectors'
-import useColorScheme from '../../hooks/useColorScheme'
+import { useRecoilState, useSetRecoilState } from 'recoil'
+import { loginState, userState } from '../../recoil/selectors'
+import { useAuthNumber } from '../../hooks/graphql/auth'
+import useLogin from '../../hooks/graphql/auth/useLogin'
 
 const JoinContainer = styled.ScrollView`
     flex: 1;
@@ -23,11 +22,16 @@ const BottomContainer = styled.View`
 
 const Signup: React.FC = () => {
     const navigation = useNavigation<any>()
-
     const [phone, setPhone] = useState<string>('')
     const [confirmNumber, setConfirmNumber] = useState<string>('')
     const [sended, setSended] = useState<boolean>(false)
     const [timeLimit, setTimeLimit] = useState<number>(0)
+
+    const [sendAuthSms] = useAuthNumber()
+    const [authNumber , setAuthNumber] = useState<string | null>(null)
+
+    const [login] = useLogin()
+
 
     const phoneNumberFormat = (phoneNumber: string) => {
 
@@ -43,15 +47,34 @@ const Signup: React.FC = () => {
             setPhone(phoneNumberFormat(phoneNumber))
         }
     }
-    const sendSms = () => {
+    const sendSms = async () => {
+        try {
+            await sendAuthSms({ variables: { phone } })
+                .then(({ data }) => setAuthNumber(data.authNumber))
+                .catch(err =>console.log(err))
+        } catch (e) {
+            console.log(e,'e')
+        }
+
         setSended(true)
         showConfirm()
         setTimeLimit(300)
     }
-    const [isLoggin, setIsLoggin] = useRecoilState(loginState)
+    const setIsLoggin = useSetRecoilState(loginState)
+    const setUser = useSetRecoilState(userState)
 
-    const checkConfirmNumber = () => {
-        setIsLoggin(true)
+    const checkConfirmNumber = async () => {
+        try {
+            await login({ variables: { phone: phone.replaceAll(' ',''), authNumber } })
+                .then(({ data: { login: data } }) =>{
+                    setUser(data)
+                    setIsLoggin(true)
+                    //set AccessToken && userInfo
+                })
+                .catch(err =>console.log(err))
+        } catch (e) {
+            console.log(e,'e')
+        }
     }
 
     useEffect(() => {

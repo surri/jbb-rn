@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components/native'
 import { TextInputProps } from 'react-native'
-import { View } from '../Themed'
+import { TextInput, View } from '../Themed'
 import { useTheme } from '@react-navigation/native'
 
 
@@ -10,10 +10,10 @@ const PrimaryTextInputContainer = styled(View)`
     margin: 12px 0;
 `
 
-const InputText = styled.TextInput`
+const InputText = styled(TextInput)`
     color: ${(props:ITextInputStyle) => `${props.color}`};
     font-size: 20px;
-    font-weight: bold;
+    font-family: 'notosans-bold';
     background-color: ${(props:ITextInputStyle) => `${props.backgroundColor}`};
     border-color: ${(props:ITextInputStyle) => `${props.borderColor}`};
     border-width: 2px;

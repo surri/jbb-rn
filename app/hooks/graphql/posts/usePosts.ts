@@ -30,11 +30,11 @@ const POSTS_QUERY = gql`
     }
 `
 
-type Virables = {
+type Variables = {
     sportsId: number,
     keyword: string,
 }
 
-export default function usePosts(variables: Virables) {
+export default function usePosts(variables: Variables) {
     return useQuery(POSTS_QUERY, { variables })
 }
