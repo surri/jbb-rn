@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Animated, Dimensions, Image } from 'react-native'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import styled from 'styled-components/native'
@@ -7,22 +7,57 @@ import { Button, ScrollView, TextInput, View } from '../../components/Themed'
 import { MaterialIcons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import { useProfile } from '../../hooks/graphql/profile'
+import useUpdateProfile from '../../hooks/graphql/profile/useUpdateProfile'
+
+export type Profile = {
+    id: string,
+    displayName: string,
+    email: string,
+    phone: string,
+}
+
 const Main: React.FC = () => {
     const width = Dimensions.get('window').width
 
-    const { data, error, loading } = useProfile()
+    const [profile, setProfile] = useState<Profile>()
 
-    console.log(data, error)
+    const { data: profileData, loading } = useProfile()
 
+    useEffect(() => {
+        profileData?.profile && setProfile(profileData?.profile)
+    }, [profileData])
+
+
+    const [updateProfile] = useUpdateProfile()
 
     const [editMode, setEditMode] = useState(false)
     const [editName, setEditName] = useState(false)
 
-    const [displayName, setDisplayName] = useState('eung')
+    const [displayName, setDisplayName] = useState('')
 
     const theme = useTheme()
 
-    return (
+    const onUpdateProfile = async(id: string) => {
+        try {
+            await updateProfile({
+                variables: {
+                    id: Number(id),
+                    input: {
+                        displayName,
+                    },
+                },
+            }).then(({ data }) => {
+                setDisplayName(data?.updateUser?.displayName)
+
+            }).catch(err =>console.log(err))
+        } catch (e) {
+            console.log(e,'e')
+        }
+        setEditName(false)
+        setEditMode(false)
+    }
+
+    return loading || !profile?.id ? (null) : (
         <SafeAreaProvider>
             <Container
                 bounces={false}
@@ -41,12 +76,11 @@ const Main: React.FC = () => {
                                 <>
                                     {editName ? (
                                         <EditModeRow
-                                            style={{
-                                                height: 40,
-                                            }}
+                                            style={{ height: 40 }}
                                         >
                                             <EditDisplayName
                                                 onChangeText={text => setDisplayName(text)}
+                                                value={displayName}
                                                 autoFocus={true}
                                                 onBlur={() => setEditName(false)}
                                                 defaultValue={displayName}
@@ -57,8 +91,6 @@ const Main: React.FC = () => {
                                         <EditModeRow>
                                             <DisplayName>{displayName}</DisplayName>
                                             <EditButton onPress={() => {
-                                                console.log('change')
-                                                // refEditDisplayName
                                                 setEditName(true)
                                             }}>
                                                 <MaterialIcons name="mode-edit" size={16} color={theme.colors.text}
@@ -81,10 +113,7 @@ const Main: React.FC = () => {
             </Container>
             {editMode ? (
                 <EditProfileButton
-                    onPress={() => {
-                        setEditName(false)
-                        setEditMode(false)
-                    }}
+                    onPress={() =>  profile.id && onUpdateProfile(profile.id)}
                 >
                     <EditProfile>수정완료</EditProfile>
                 </EditProfileButton>
@@ -147,7 +176,7 @@ const EditDisplayName = styled(TextInput)`
     border-left-width: 0;
     border-right-width: 0;
     font-size: 24px;
-    font-weight: bold;
+    font-family: 'notosans-bold';
 `
 
 const EditGreetings = styled(TextInput)`

@@ -56,6 +56,7 @@ const SearchBar: React.FC<ISearchBar> = ({
                 opacity,
                 transform: [{ translateY }],
                 backgroundColor: theme.colors.background,
+                margin: 12,
             }}
         >
             <SearchIcon name="magnifying-glass" size={24} color={theme.colors.text} />

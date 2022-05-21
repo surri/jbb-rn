@@ -8,7 +8,7 @@ type Profile = {
 const Profile = ({ name }: Profile) => {
     return (
         <Container>
-            <UserImage/>
+            <UserImage source={require('../../../../../assets/images/sample-place.png') }/>
             <UserName>{name}</UserName>
         </Container>
     )
@@ -22,7 +22,7 @@ const UserName = styled(TextStyles.Regular)`
     margin: 0 8px;
 `
 
-const UserImage = styled.View`
+const UserImage = styled.Image`
     width: 32px;
     height: 32px;
     border-radius: 32px;

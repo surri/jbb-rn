@@ -8,6 +8,8 @@ import 'moment/locale/ko'
 import { useNavigation } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import { SearchNavigatorParams } from '../../../types/navigation'
+import { Feather } from '@expo/vector-icons'
+import { useTheme } from '@react-navigation/native'
 
 export type Post = {
     id: number,
@@ -34,6 +36,8 @@ const PostCard: React.FC<IProps> = ({ post }: IProps) => {
         },
     } = post
 
+    const theme = useTheme()
+
     return (
         <Container
             onPress={() => navigation.navigate('Show', { post: post.node })}
@@ -53,7 +57,9 @@ const PostCard: React.FC<IProps> = ({ post }: IProps) => {
                 </InfoRow>
                 <InfoRow>
                     <Row><Price>20,000원</Price></Row>
-                    <Row><Price>❤️</Price></Row>
+                    <Row>
+                        <Feather name="heart" size={16} color={theme.colors.placeHolder} />
+                    </Row>
                 </InfoRow>
             </InfoContainer>
         </Container>
