@@ -6,7 +6,8 @@ import { DrawerContentComponentProps } from '@react-navigation/drawer'
 import styled from 'styled-components/native'
 import TextStyles from '../styled/TextStyles'
 import { useRecoilState } from 'recoil'
-import { loginState } from '../../recoil/selectors'
+import { isDarkState, loginState } from '../../recoil/selectors'
+import { View } from '../Themed'
 
 interface SettingsTitle {
     color?: string;
@@ -15,28 +16,6 @@ interface SettingsTitle {
 interface MenuLabel {
     color?: string;
 }
-
-const SettingsContainer = styled.View`
-    padding: 0 24px;
-`
-
-const SettingsTitle = styled(TextStyles.Regular)`
-    color: ${(props: SettingsTitle) => props.color || '#000'};
-    padding: 32px 0;
-`
-
-const SettingMenu = styled.TouchableOpacity`
-`
-
-const MenuLabel = styled(TextStyles.Regular)`
-    color: ${(props: MenuLabel) => props.color || '#000'};
-`
-
-const Partition = styled.View`
-    margin: 24px 0;
-    height: 0.5px;
-    background-color: #ccc;
-`
 
 
 const DrawerMenu: React.FC<DrawerContentComponentProps> = (props: DrawerContentComponentProps) => {
@@ -62,6 +41,24 @@ const DrawerMenu: React.FC<DrawerContentComponentProps> = (props: DrawerContentC
             </SettingMenu>
         )
     }
+    const ThemeButton = () => {
+        const [isDark, setIsDark] = useRecoilState(isDarkState)
+
+        // const user = useSelector((state: IState) => state.authReducer.user)
+        const setDark = () => setIsDark(true)
+        const setLight = () => setIsDark(false)
+
+        const action = isDark ? setLight : setDark
+        const label = isDark ? '라이트모드' : '다크모드'
+
+        return (
+            <SettingMenu>
+                <SettingMenu onPress={action}>
+                    <MenuLabel color={theme.colors.text}>{label}</MenuLabel>
+                </SettingMenu>
+            </SettingMenu>
+        )
+    }
 
     const menus = [
         { label: '계정관리', navigation: 'Account'  },
@@ -73,8 +70,7 @@ const DrawerMenu: React.FC<DrawerContentComponentProps> = (props: DrawerContentC
     }
 
     return (
-        <SettingsContainer>
-            <SettingsTitle color={theme.colors.text}>설정</SettingsTitle>
+        <Container>
             {menus.map((menu, index) => (
                 <SettingMenu key={index} onPress={() => toNavigation(menu.navigation)}>
                     {index > 0 && <Partition />}
@@ -83,8 +79,34 @@ const DrawerMenu: React.FC<DrawerContentComponentProps> = (props: DrawerContentC
             ))}
             <Partition />
             <AuthButton />
-        </SettingsContainer>
+            <Partition />
+            <ThemeButton />
+        </Container>
     )
 }
 
+
+const Container = styled(View)`
+    padding: 40px 24px;
+    flex: 1;
+    justify-content: flex-end;
+`
+
+const SettingsTitle = styled(TextStyles.Regular)`
+    color: ${(props: SettingsTitle) => props.color || '#000'};
+    padding: 32px 0;
+`
+
+const SettingMenu = styled.TouchableOpacity`
+`
+
+const MenuLabel = styled(TextStyles.Regular)`
+    color: ${(props: MenuLabel) => props.color || '#000'};
+`
+
+const Partition = styled.View`
+    margin: 24px 0;
+    height: 0.5px;
+    background-color: #ccc;
+`
 export default DrawerMenu
