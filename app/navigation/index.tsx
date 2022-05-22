@@ -60,7 +60,6 @@ export default function Navigation() {
 const Stack = createNativeStackNavigator<RootStackParams>()
 
 function RootNavigator() {
-    const theme = useTheme()
     return (
         <Stack.Navigator>
             <Stack.Screen name="Root" component={BottomTabNavigator} options={{ headerShown: false }} />
@@ -70,12 +69,7 @@ function RootNavigator() {
                     name="Modal"
                     component={EditSportsModal}
                     options={{
-                        title: '카테고리',
-                        headerTintColor: theme.colors.text,
-                        headerTitleStyle: {
-                            fontFamily: 'notosans-bold',
-                            fontSize: 18,
-                        },
+                        headerTitle: '',
                         headerTransparent: true,
                     }}/>
             </Stack.Group>

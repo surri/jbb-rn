@@ -6,11 +6,14 @@ import { Main, Show } from '../../screens/Search'
 import { Pressable } from 'react-native'
 import { FontAwesome } from '@expo/vector-icons'
 import { Text, View } from '../../components/Themed'
+import { useRecoilValue } from 'recoil'
+import { selectedSportsState } from '../../recoil/selectors'
 
 const SettingsStack = createStackNavigator<SearchNavigatorParams>()
 
 const SearchNavigator: React.FC = () => {
     const theme = useTheme()
+    const selectedSports = useRecoilValue<any>(selectedSportsState)
 
     const HeaderTitle = ({ navigation, isShowHeader }: any) => {
         return (
@@ -25,7 +28,7 @@ const SearchNavigator: React.FC = () => {
                         fontWeight: 'bold',
                         color: isShowHeader || isShowHeader == undefined ? theme.colors.text : theme.colors.background,
                     }} >
-                        골프
+                        {selectedSports?.nameKR ? selectedSports?.nameKR : '취미를 선택해주세요'}
                     </Text>
                     <FontAwesome
                         name="chevron-down"

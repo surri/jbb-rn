@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Animated, NativeScrollEvent, NativeSyntheticEvent, Platform, RefreshControl, SafeAreaView } from 'react-native'
+import { useRecoilValue } from 'recoil'
 import styled from 'styled-components/native'
 import { PostsPartition } from '../../components/Card/Posts/Parts'
 import PostCard, { Post } from '../../components/Card/Posts/PostCard'
@@ -8,6 +9,7 @@ import { LoaderPostList } from '../../components/Loader/Posts'
 import { KeyboardAvoidingView, View, Text, TouchableOpacity } from '../../components/Themed'
 import { usePosts } from '../../hooks/graphql/posts'
 import useWait from '../../hooks/useWait'
+import { selectedSportsState } from '../../recoil/selectors'
 
 type Props = {
     posts: Post[];
@@ -32,8 +34,9 @@ const Main: React.FC<Props> = () => {
 
     const wait = useWait()
 
-    const sportsId = 2 //golf
-    const { data, refetch, loading } = usePosts({ sportsId, keyword })
+    const selectedSports = useRecoilValue(selectedSportsState)
+
+    const { data, refetch, loading } = usePosts({ sportsId: selectedSports?.id, keyword })
 
     const posts = data?.posts?.edges || []
 
@@ -76,7 +79,7 @@ const Main: React.FC<Props> = () => {
             style={{ flexGrow: 1 }}
             keyboardVerticalOffset={
                 Platform.select({
-                    ios: 0,
+                    ios: 100,
                     android: 200,
                 })
             }

@@ -55,6 +55,7 @@ const SearchBar: React.FC<ISearchBar> = ({
             style={{
                 opacity,
                 transform: [{ translateY }],
+                borderColor: theme.colors.text,
                 backgroundColor: theme.colors.background,
                 margin: 12,
             }}
@@ -66,7 +67,7 @@ const SearchBar: React.FC<ISearchBar> = ({
                 color={theme.colors.text}
                 onChangeText={(value) => setSearchKeyword(value)}
                 placeholder={'Search'}
-                placeholderTextColor={theme.colors.inactive}
+                placeholderTextColor={theme.colors.placeHolder}
                 onSubmitEditing={onSubmit}
             />
 
@@ -90,7 +91,7 @@ const SearchAnimatedContainer = styled(Animated.View)`
     left: 0;
     right: 0;
     border-radius: 20px;
-    border-color: ${(props:ITextInputStyle) => `${props.borderColor}`};
+    /* border-color: ${(props:ITextInputStyle) => `${props.borderColor}`}; */
     border-width: 2px;
 `
 

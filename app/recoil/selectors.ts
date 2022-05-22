@@ -14,3 +14,8 @@ export const isDarkState = atom({
     key: 'isDarkState',
     default: false,
 })
+
+export const selectedSportsState = atom({
+    key: 'selectedSportsState',
+    default: null,
+})
