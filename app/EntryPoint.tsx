@@ -8,10 +8,11 @@ import {
     RecoilRoot,
 } from 'recoil'
 import client from './config/client'
+import { Text } from './components/Themed'
+import React from 'react'
 
 export default function App() {
     const isLoadingComplete = useCachedResources()
-    // const colorScheme = useColorScheme()
 
     if (!isLoadingComplete) {
         return null
@@ -20,8 +21,10 @@ export default function App() {
             <ApolloProvider client={client}>
                 <SafeAreaProvider>
                     <RecoilRoot>
-                        <Navigation/>
-                        <StatusBar />
+                        <React.Suspense fallback={<Text>Loading</Text>}>
+                            <Navigation/>
+                            <StatusBar />
+                        </React.Suspense>
                     </RecoilRoot>
                 </SafeAreaProvider>
             </ApolloProvider>

@@ -1,6 +1,7 @@
 import { ApolloClient, ApolloLink, createHttpLink, InMemoryCache } from '@apollo/client'
 import { setContext } from '@apollo/client/link/context'
 import { createUploadLink } from 'apollo-upload-client'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 // const uri = 'https://api.jangbibbal.com/graphql'
 const uri = 'http://localhost:3004/graphql'
 
@@ -12,10 +13,9 @@ const requestLink = createHttpLink({
     uri,
 })
 
-const authLink = setContext((_, { headers }) => {
-    const tempToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJldW5nIiwiZGlzcGxheU5hbWUiOiJFdW5nIiwicGhvbmUiOiIwMTA5MDk2NDA0MiIsImVtYWlsIjoiRXVuZ0Bob3RwbGVyLmNvbSIsImlhdCI6MTY1MjkyNDg2MiwiZXhwIjoxNjUzMDExMjYyfQ.utqtDLDHXJk18dZ76zec-J4qcx1M5lHzbNfyVm-HqrY'
-    // get the authentication token from local storage if it exists
-    const token = tempToken //localStorage.getItem('token')
+const authLink = setContext(async (_, { headers }) => {
+    const user = await AsyncStorage.getItem('user')
+    const token = !!user && JSON.parse(user)?.accessToken || null
     return {
         headers: {
             ...headers,

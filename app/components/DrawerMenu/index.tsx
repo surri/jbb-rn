@@ -5,8 +5,8 @@ import { useTheme } from '@react-navigation/native'
 import { DrawerContentComponentProps } from '@react-navigation/drawer'
 import styled from 'styled-components/native'
 import TextStyles from '../styled/TextStyles'
-import { useRecoilState } from 'recoil'
-import { isDarkState, loginState } from '../../recoil/selectors'
+import { useRecoilState, useSetRecoilState } from 'recoil'
+import { isDarkState, loginState, userState } from '../../recoil/selectors'
 import { View } from '../Themed'
 
 interface SettingsTitle {
@@ -24,10 +24,13 @@ const DrawerMenu: React.FC<DrawerContentComponentProps> = (props: DrawerContentC
 
     const AuthButton = () => {
         const [isLoggedIn, setIsLoggin] = useRecoilState(loginState)
+        const setUser = useSetRecoilState(userState)
 
-        // const user = useSelector((state: IState) => state.authReducer.user)
         const onLogin = () => setIsLoggin(true)
-        const onLogout = () => setIsLoggin(false)
+        const onLogout = () => {
+            setUser(null)
+            setIsLoggin(false)
+        }
 
         const action = isLoggedIn ? onLogout : onLogin
         const label = isLoggedIn ? '로그아웃' : '로그인'
@@ -37,14 +40,12 @@ const DrawerMenu: React.FC<DrawerContentComponentProps> = (props: DrawerContentC
                 <SettingMenu onPress={action}>
                     <MenuLabel color={theme.colors.text}>{label}</MenuLabel>
                 </SettingMenu>
-                {/* <Text>Login id : {id}</Text> */}
             </SettingMenu>
         )
     }
     const ThemeButton = () => {
         const [isDark, setIsDark] = useRecoilState(isDarkState)
 
-        // const user = useSelector((state: IState) => state.authReducer.user)
         const setDark = () => setIsDark(true)
         const setLight = () => setIsDark(false)
 

@@ -36,7 +36,7 @@ export default function Navigation() {
         <NavigationContainer
             linking={LinkingConfiguration}
             theme={isDark ? darkTheme : lightTheme}>
-            {!isLoggedIn ? (
+            {isLoggedIn ? (
                 <Drawer.Navigator
                     screenOptions={{
                         headerShown: false,
