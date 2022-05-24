@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components/native'
 import { KeyboardAvoidingView, Platform } from 'react-native'
 import { useForm } from 'react-hook-form'
@@ -6,12 +6,11 @@ import { useNavigation, useTheme } from '@react-navigation/native'
 import TextStyles from '../../components/styled/TextStyles'
 import { Button, ScrollView, TextInput, View } from '../../components/Themed'
 import { StackNavigationProp } from '@react-navigation/stack'
-import { TabNavigatorParams } from '../../types/navigation'
+import { SearchNavigatorParams, TabNavigatorParams } from '../../types/navigation'
 import AttachImages from '../../components/AttachImages'
-import { ReactNativeFile } from 'apollo-upload-client'
 import { useCreatePost } from '../../hooks/graphql/posts'
 import { useRecoilValue } from 'recoil'
-import { selectedSportsState, userState } from '../../recoil/selectors'
+import { selectedSportsState } from '../../recoil/selectors'
 // import { gql, useMutation } from '@apollo/client'
 // import ImageViewer from '../../components/Shared/ImageViewer'
 
@@ -28,7 +27,12 @@ type IForm = {
 //     }
 // }
 // `
-const Create: React.FC = ({ route }: any) => {
+
+type Props = {
+    navigation: StackNavigationProp<SearchNavigatorParams, 'Create'>,
+}
+
+const Create: React.FC<Props> = ({ navigation, route }: Props) => {
     const { register, setValue, watch, handleSubmit, reset, formState: { errors } } = useForm<IForm>({
         defaultValues: {
             title: '',
@@ -36,7 +40,6 @@ const Create: React.FC = ({ route }: any) => {
             images: [],
         },
     })
-    const navigation = useNavigation<StackNavigationProp<TabNavigatorParams>>()
     // const [uploadImage, { data, loading, error }] = useMutation(UPLOAD_IMAGE)
     const [uploadImage, { data, loading, error }] = useCreatePost()
 
@@ -68,7 +71,7 @@ const Create: React.FC = ({ route }: any) => {
             }).then(({ data }) => {
                 console.log(data)
                 reset()
-                navigation.navigate('Search')
+                // navigation.navigate('Search')
             })
                 .catch(err =>console.log(JSON.stringify(err),'err'))
             // setStatus('Uploaded')
@@ -132,9 +135,12 @@ const Create: React.FC = ({ route }: any) => {
                 />
             </Container>
             <ButtonContainer
+                style={{ borderColor: theme.colors.active }}
                 onPress={handleSubmit(onSubmit)}
             >
-                <ButtonText>작성완료</ButtonText>
+                <ButtonText style={{ color: theme.colors.active }}>
+                    작성완료
+                </ButtonText>
             </ButtonContainer>
         </KeyboardAvoidingView>
     )

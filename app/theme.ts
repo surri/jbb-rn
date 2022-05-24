@@ -7,6 +7,7 @@ const light = {
     inactive: '#4e4e4e4e',
     placeHolder: '#999999',
     notification: '#ff1521',
+    active: '#6667ab',
 }
 
 const dark = {
@@ -18,6 +19,7 @@ const dark = {
     inactive: '#4e4e4eee',
     placeHolder: '#999999',
     notification: '#ff1521',
+    active: '#6667ab',
 }
 
 export default {

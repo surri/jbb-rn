@@ -1,76 +1,63 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components/native'
 import { KeyboardAvoidingView, Platform } from 'react-native'
 import { useForm } from 'react-hook-form'
-import { useNavigation, useTheme } from '@react-navigation/native'
+import { RouteProp, useTheme } from '@react-navigation/native'
 import TextStyles from '../../components/styled/TextStyles'
 import { Button, ScrollView, TextInput, View } from '../../components/Themed'
 import { StackNavigationProp } from '@react-navigation/stack'
-import { TabNavigatorParams } from '../../types/navigation'
+import { SearchNavigatorParams } from '../../types/navigation'
 import AttachImages from '../../components/AttachImages'
-import { ReactNativeFile } from 'apollo-upload-client'
-import { useCreatePost } from '../../hooks/graphql/posts'
-import { useRecoilValue } from 'recoil'
-import { selectedSportsState, userState } from '../../recoil/selectors'
-// import { gql, useMutation } from '@apollo/client'
-// import ImageViewer from '../../components/Shared/ImageViewer'
+import { Post } from '../../components/Card/Posts/PostCard'
+import { usePost, useUpdatePost } from '../../hooks/graphql/posts'
 
-// };
 type IForm = {
     title: string,
     contents: string,
     images: any
 }
-// const UPLOAD_IMAGE = gql`
-// mutation uploadImages($files: [Upload]) {
-//     uploadImages(files: $files) {
-//         id
-//     }
-// }
-// `
-const Create: React.FC = ({ route }: any) => {
+
+type Props = {
+    navigation: StackNavigationProp<SearchNavigatorParams, 'Edit'>,
+    route: RouteProp<SearchNavigatorParams, 'Edit'>
+}
+
+const Edit: React.FC<Props> = ({ navigation, route }: Props) => {
+    const { post } = route.params
     const { register, setValue, watch, handleSubmit, reset, formState: { errors } } = useForm<IForm>({
         defaultValues: {
-            title: '',
-            contents: '',
+            title: post.title,
+            contents: post.contents,
             images: [],
         },
     })
-    const navigation = useNavigation<StackNavigationProp<TabNavigatorParams>>()
-    // const [uploadImage, { data, loading, error }] = useMutation(UPLOAD_IMAGE)
-    const [uploadImage, { data, loading, error }] = useCreatePost()
 
-    const sportsId = useRecoilValue(selectedSportsState)?.id
 
-    // const generateRNFile = (uri, name) => {
-    //     return uri ? new ReactNativeFile({
-    //         uri,
-    //         type: 'image',
-    //         name,
-    //     }) : null
-    // }
+    const { data, called, loading } = usePost({ id: post.id })
 
+    useEffect(() => {
+        const { post } = data || null
+        if (post){
+            setValue('title', post.title)
+            setValue('contents', post.contents)
+        }
+    }, [called])
+
+    const [updatePost] = useUpdatePost()
 
     const onSubmit = async (form: IForm) => {
-        // const files = watch('images').map(image => {
-        //     return generateRNFile(image, `picture-${Date.now()}.jpg`)
-        // })
-
         const input = {
             title: form.title,
             contents: form.contents,
-            sportsId,
         }
 
         try {
-            await uploadImage({
-                variables: { input },
+            await updatePost({
+                variables: { id: Number(post.id), input },
             }).then(({ data }) => {
-                console.log(data)
                 reset()
-                navigation.navigate('Search')
-            })
-                .catch(err =>console.log(JSON.stringify(err),'err'))
+                navigation.replace('Main')
+            }).catch(err =>console.log(JSON.stringify(err),'err'))
             // setStatus('Uploaded')
         } catch (e) {
             console.log(e,'e')
@@ -100,7 +87,7 @@ const Create: React.FC = ({ route }: any) => {
         setValue('images', watch('images').filter((item: string) => item != uri ))
     }
 
-    return (
+    return loading ? (null) : (
         <KeyboardAvoidingView
             style={{ flex: 1 }}
             behavior={Platform.OS === 'ios' ? 'padding' : undefined}
@@ -134,13 +121,13 @@ const Create: React.FC = ({ route }: any) => {
             <ButtonContainer
                 onPress={handleSubmit(onSubmit)}
             >
-                <ButtonText>작성완료</ButtonText>
+                <ButtonText>수정완료</ButtonText>
             </ButtonContainer>
         </KeyboardAvoidingView>
     )
 }
 
-export default Create
+export default Edit
 
 const Container = styled(ScrollView)`
     flex: 1;

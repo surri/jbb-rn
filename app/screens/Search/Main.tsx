@@ -1,25 +1,29 @@
+import { useIsFocused } from '@react-navigation/native'
 import React, { useEffect, useRef, useState } from 'react'
 import { Animated, NativeScrollEvent, NativeSyntheticEvent, Platform, RefreshControl, SafeAreaView } from 'react-native'
 import { useRecoilValue } from 'recoil'
 import styled from 'styled-components/native'
 import { PostsPartition } from '../../components/Card/Posts/Parts'
 import PostCard, { Post } from '../../components/Card/Posts/PostCard'
-import SearchBar from '../../components/Header/SearchBar'
+import SearchBar from '../../components/Posts/SearchBar'
 import { LoaderPostList } from '../../components/Loader/Posts'
 import { KeyboardAvoidingView, View, Text, TouchableOpacity } from '../../components/Themed'
 import { usePosts } from '../../hooks/graphql/posts'
 import useWait from '../../hooks/useWait'
 import { selectedSportsState } from '../../recoil/selectors'
+import { StackNavigationProp } from '@react-navigation/stack'
+import { SearchNavigatorParams } from '../../types/navigation'
 
 type Props = {
-    posts: Post[];
+    posts: Post[],
+    navigation: StackNavigationProp<SearchNavigatorParams>,
 }
 
 type Pagination<T> = {
     node: T
 }
 
-const Main: React.FC<Props> = () => {
+const Main: React.FC<Props> = ({ navigation }: Props) => {
 
     const [searchBarActive, setSearchBarActive] = useState(false)
     const [keyword, setKeyword] = useState('')
@@ -34,11 +38,20 @@ const Main: React.FC<Props> = () => {
 
     const wait = useWait()
 
-    const selectedSports = useRecoilValue(selectedSportsState)
+    const sportsId = useRecoilValue(selectedSportsState)?.id
 
-    const { data, refetch, loading } = usePosts({ sportsId: selectedSports?.id, keyword })
+    const { data, refetch, loading } = usePosts({ sportsId, keyword })
 
     const posts = data?.posts?.edges || []
+
+    const isFocused = useIsFocused()
+
+
+
+
+    useEffect(() => {
+        isFocused && refetch()
+    },[isFocused])
 
     useEffect(() => {
         Animated.timing (opacity, {
@@ -51,6 +64,10 @@ const Main: React.FC<Props> = () => {
 
     const onSearch = () => {
         refetch()
+    }
+
+    const onCreate = () => {
+        navigation.navigate('Create')
     }
 
     const onSearchCategory = () => {
@@ -87,7 +104,9 @@ const Main: React.FC<Props> = () => {
             <SafeAreaView
                 style={{ flex: 1 }}
             >
-                { searchBarActive ? (
+
+
+                { sportsId ? searchBarActive ? (
                     <SearchBoardScrollView
                         style={{ opacity }}
                         contentContainerStyle={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
@@ -95,20 +114,10 @@ const Main: React.FC<Props> = () => {
                     >
                         <SearchBoardContainer>
                             <SearchTypeBox>
-                                <Text>카테고리내 검색</Text>
+                                {/* <Text>카테고리내 검색</Text> */}
                             </SearchTypeBox>
                             <SearchKeywordBox
                                 onPress={onSearchCategory}
-                            >
-                                <Text>{keyword}</Text>
-                            </SearchKeywordBox>
-                        </SearchBoardContainer>
-                        <SearchBoardContainer>
-                            <SearchTypeBox>
-                                <Text>전체검색</Text>
-                            </SearchTypeBox>
-                            <SearchKeywordBox
-                                onPress={onSearch}
                             >
                                 <Text>{keyword}</Text>
                             </SearchKeywordBox>
@@ -130,13 +139,18 @@ const Main: React.FC<Props> = () => {
                         ItemSeparatorComponent={() => <PostsPartition/>}
                         // ListEmptyComponent={<LoaderPostList rows={8} />}
                     />
+                ) : (
+                    null
                 )}
-                <SearchBar
-                    visible={isScrollTop}
-                    setSearchBarActive={setSearchBarActive}
-                    setSearchKeyword={setKeyword}
-                    onSubmit={onSearch}
-                />
+                {sportsId && (
+                    <SearchBar
+                        visible={isScrollTop}
+                        setSearchBarActive={setSearchBarActive}
+                        setSearchKeyword={setKeyword}
+                        onSubmit={onSearch}
+                        onCreate={onCreate}
+                    />
+                )}
             </SafeAreaView>
         </KeyboardAvoidingView>
     )

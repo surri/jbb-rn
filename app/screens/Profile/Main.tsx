@@ -113,15 +113,21 @@ const Main: React.FC = () => {
             </Container>
             {editMode ? (
                 <EditProfileButton
+                    style={{  borderColor: theme.colors.active }}
                     onPress={() =>  profile.id && onUpdateProfile(profile.id)}
                 >
-                    <EditProfile>수정완료</EditProfile>
+                    <EditProfile style={{ color: theme.colors.active }}>
+                        수정완료
+                    </EditProfile>
                 </EditProfileButton>
             ): (
                 <EditProfileButton
+                    style={{  borderColor: theme.colors.active }}
                     onPress={() => setEditMode(true)}
                 >
-                    <EditProfile>프로필수정</EditProfile>
+                    <EditProfile style={{ color: theme.colors.active }}>
+                        프로필 수정
+                    </EditProfile>
                 </EditProfileButton>
             )}
         </SafeAreaProvider>

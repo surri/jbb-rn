@@ -50,19 +50,17 @@ export default function EditSportsModal() {
         navigation.goBack()
     }
 
-    console.log(data,error,loading)
-
     useEffect(() => {
         setSports(data?.sports)
     }, [loading])
 
     const Item = ({ item, selected }: {item: Sports, selected: boolean}) => {
-        const selectedColor = selected ? theme.colors.text : theme.colors.placeHolder
+        const selectedColor = selected ? theme.colors.active : theme.colors.placeHolder
         return (
             <SportsBox
                 width={columnWidth}
                 background='transparent'
-                borderColor={selected ? theme.colors.text : theme.colors.placeHolder}
+                borderColor={selectedColor}
                 onPress={() => onSelectSports(item)}
             >
                 {selected && <SelectedIcon><FontAwesome name="check" size={24} color={selectedColor} /></SelectedIcon>}

@@ -1,13 +1,15 @@
 import React, { useEffect, useRef } from 'react'
 import { useTheme } from '@react-navigation/native'
 import styled from 'styled-components/native'
-import { Entypo } from '@expo/vector-icons'
-import { Animated, Easing } from 'react-native'
+import { Entypo, AntDesign } from '@expo/vector-icons'
+import { Animated } from 'react-native'
+import { TouchableOpacity, View } from '../Themed'
 
 interface ISearchBar {
     setSearchBarActive:(active: boolean) => void;
     setSearchKeyword:(keyword: string) => void;
     onSubmit:() => void;
+    onCreate:() => void;
     visible: boolean;
 }
 
@@ -15,6 +17,7 @@ const SearchBar: React.FC<ISearchBar> = ({
     setSearchBarActive,
     setSearchKeyword,
     onSubmit,
+    onCreate,
     visible,
 }: ISearchBar) => {
     const theme = useTheme()
@@ -55,22 +58,38 @@ const SearchBar: React.FC<ISearchBar> = ({
             style={{
                 opacity,
                 transform: [{ translateY }],
-                borderColor: theme.colors.text,
-                backgroundColor: theme.colors.background,
                 margin: 12,
             }}
         >
-            <SearchIcon name="magnifying-glass" size={24} color={theme.colors.text} />
-            <SearchInputBox
-                onFocus={() => setSearchBarActive(true)}
-                onBlur={() => setSearchBarActive(false)}
-                color={theme.colors.text}
-                onChangeText={(value) => setSearchKeyword(value)}
-                placeholder={'Search'}
-                placeholderTextColor={theme.colors.placeHolder}
-                onSubmitEditing={onSubmit}
-            />
-
+            <SearchContainer
+                style={{
+                    borderColor: theme.colors.active,
+                    backgroundColor: theme.colors.background,
+                }}
+            >
+                <SearchIcon name="magnifying-glass" size={24} color={theme.colors.active} />
+                <SearchInputBox
+                    onFocus={() => setSearchBarActive(true)}
+                    onBlur={() => setSearchBarActive(false)}
+                    color={theme.colors.text}
+                    onChangeText={(value) => setSearchKeyword(value)}
+                    placeholder={'Search'}
+                    placeholderTextColor={theme.colors.placeHolder}
+                    onSubmitEditing={onSubmit}
+                />
+            </SearchContainer>
+            <CreatePostContainer onPress={onCreate}>
+                <AntDesign
+                    name="pluscircleo"
+                    size={40}
+                    color={theme.colors.active}
+                    style={{
+                        backgroundColor: theme.colors.background,
+                        borderRadius: 20,
+                        overflow: 'hidden',
+                    }}
+                />
+            </CreatePostContainer>
         </SearchAnimatedContainer>
     )
 }
@@ -90,9 +109,18 @@ const SearchAnimatedContainer = styled(Animated.View)`
     bottom: 0;
     left: 0;
     right: 0;
+`
+
+const SearchContainer= styled(View)`
+    flex: 1;
+    flex-direction: row;
     border-radius: 20px;
-    /* border-color: ${(props:ITextInputStyle) => `${props.borderColor}`}; */
     border-width: 2px;
+`
+
+const CreatePostContainer= styled(TouchableOpacity)`
+    border: 0;
+    margin: 12px;
 `
 
 const SearchIcon = styled(Entypo)`

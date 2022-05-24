@@ -1,7 +1,7 @@
 import { gql, useQuery } from '@apollo/client'
 
 const POST_QUERY = gql`
-    query usePostShow($id: ID!) {
+    query usePost($id: ID!) {
         post(id: $id) {
             id
             title
@@ -16,9 +16,8 @@ const POST_QUERY = gql`
 
 type Variables = {
     id: number,
-    userId: number
 }
 
-export default function usePostShow(variables: Variables) {
+export default function usePost(variables: Variables) {
     return useQuery(POST_QUERY, { variables })
 }

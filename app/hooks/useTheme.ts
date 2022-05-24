@@ -12,6 +12,7 @@ declare module '@react-navigation/native' {
             inactive: string,
             placeHolder: string,
             notification: string,
+            active: string,
         };
     };
     export function useTheme(): ExtendedTheme;

@@ -64,10 +64,10 @@ export type SettingsNavigatorParams = {
 }
 
 export type SearchNavigatorParams = {
-    Main: {},
-    Show: {
-        post: Post
-    },
+    Main: undefined,
+    Create: undefined,
+    Edit: { post: Post }
+    Show: { post: Post },
 }
 export type MessagesNavigatorParams = {
     Main: {},

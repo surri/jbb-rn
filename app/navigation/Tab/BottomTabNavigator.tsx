@@ -1,10 +1,9 @@
 import * as React from 'react'
-import { BottomTabBar, createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { TabNavigatorParams } from '../../types/navigation'
-import { Entypo, AntDesign, FontAwesome } from '@expo/vector-icons'
+import { Entypo, FontAwesome } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import SearchNavigator from '../Search/SearchNavigator'
-import CreateNavigator from '../Create/CreateNavigator'
 import ProfileNavigator from '../Profile/ProfileNavigator'
 import MessagesNavigator from '../Messages/MessagesNavigator'
 import { Platform } from 'react-native'
@@ -24,13 +23,13 @@ const BottomTabNavigator: React.FC = () => {
                     backgroundColor: Platform.select({ ios: 'transparent', android: theme.colors.background }),
                     paddingTop: 8,
                 },
-                tabBarActiveTintColor: theme.colors.text,
+                tabBarActiveTintColor: theme.colors.active,
                 tabBarInactiveTintColor: theme.colors.placeHolder,
                 tabBarIcon: ({ color }) => {
                     if (route.name === 'Search'){
                         return <Entypo name="magnifying-glass" size={24} color={color} />
-                    } else if (route.name === 'Create') {
-                        return <AntDesign name="pluscircleo" size={24} color={color} />
+                    // } else if (route.name === 'Create') {
+                    //     return <AntDesign name="pluscircleo" size={24} color={color} />
                     } else if (route.name === 'Messages') {
                         return <Entypo name="chat" size={24} color={color} />
                     } else if (route.name === 'Profile'){
@@ -44,11 +43,11 @@ const BottomTabNavigator: React.FC = () => {
                 component={SearchNavigator}
                 options={{ tabBarLabel: '' }}
             />
-            <Tab.Screen
+            {/* <Tab.Screen
                 name="Create"
                 component={CreateNavigator}
                 options={{ tabBarLabel: '' }}
-            />
+            /> */}
             <Tab.Screen
                 name="Messages"
                 component={MessagesNavigator}
