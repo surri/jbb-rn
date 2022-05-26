@@ -147,16 +147,17 @@ const Container = styled(ScrollView)`
     padding: 0 24px;
 `
 
+
+const ContentsContainer = styled(View)`
+    flex: 1;
+`
+
 const ButtonContainer = styled(Button)`
     justify-content: center;
     align-items: center;
     padding: 12px;
     margin: 12px;
     border-radius: 12px;
-`
-
-const ContentsContainer = styled(View)`
-    flex: 1;
 `
 
 const ButtonText = styled(TextStyles.Medium)`

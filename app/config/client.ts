@@ -2,8 +2,8 @@ import { ApolloClient, ApolloLink, createHttpLink, InMemoryCache } from '@apollo
 import { setContext } from '@apollo/client/link/context'
 import { createUploadLink } from 'apollo-upload-client'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-// const uri = 'https://api.jangbibbal.com/graphql'
-const uri = 'http://localhost:3004/graphql'
+const uri = 'https://api.jangbibbal.com/graphql'
+// const uri = 'http://localhost:3004/graphql'
 
 const uploadLink = (createUploadLink({
     uri,
@@ -14,7 +14,7 @@ const requestLink = createHttpLink({
 })
 
 const authLink = setContext(async (_, { headers }) => {
-    const user = await AsyncStorage.getItem('user')
+    const user = await AsyncStorage.getItem('userState')
     const token = !!user && JSON.parse(user)?.accessToken || null
     return {
         headers: {
@@ -24,7 +24,7 @@ const authLink = setContext(async (_, { headers }) => {
     }
 })
 export default new ApolloClient({
-    link: ApolloLink.from([authLink, requestLink, uploadLink]),
+    link: ApolloLink.from([authLink, uploadLink, requestLink ]),
     cache: new InMemoryCache(),
     defaultOptions: { watchQuery: { fetchPolicy: 'cache-and-network' } },
     connectToDevTools: true,

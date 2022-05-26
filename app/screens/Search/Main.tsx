@@ -3,7 +3,6 @@ import React, { useEffect, useRef, useState } from 'react'
 import { Animated, NativeScrollEvent, NativeSyntheticEvent, Platform, RefreshControl, SafeAreaView } from 'react-native'
 import { useRecoilValue } from 'recoil'
 import styled from 'styled-components/native'
-import { PostsPartition } from '../../components/Card/Posts/Parts'
 import PostCard, { Post } from '../../components/Card/Posts/PostCard'
 import SearchBar from '../../components/Posts/SearchBar'
 import { LoaderPostList } from '../../components/Loader/Posts'
@@ -13,6 +12,7 @@ import useWait from '../../hooks/useWait'
 import { selectedSportsState } from '../../recoil/selectors'
 import { StackNavigationProp } from '@react-navigation/stack'
 import { SearchNavigatorParams } from '../../types/navigation'
+import { PostsPartition } from '../../components/Card/Posts/Parts'
 
 type Props = {
     posts: Post[],

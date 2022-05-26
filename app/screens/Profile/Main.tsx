@@ -8,6 +8,7 @@ import { MaterialIcons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import { useProfile } from '../../hooks/graphql/profile'
 import useUpdateProfile from '../../hooks/graphql/profile/useUpdateProfile'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 export type Profile = {
     id: string,

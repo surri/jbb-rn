@@ -7,7 +7,7 @@ import Carousel, { Pagination } from 'react-native-snap-carousel'
 import { SearchNavigatorParams } from '../types/navigation'
 
 const HeaderCarouselScrollView = ({ images, childComponents, data, renderItem }: any) => {
-    const navigation = useNavigation<StackNavigationProp<SearchNavigatorParams>>()
+    const navigation = useNavigation<StackNavigationProp<SearchNavigatorParams, 'Show'>>()
     const width = Dimensions.get('window').width
     const [activeIndex, setActiveIndex] = useState(0)
     const scrollY = useRef(new Animated.Value(0)).current

@@ -89,6 +89,7 @@ const SearchNavigator: React.FC<Props> = ({ navigation, route }: Props) => {
                     backgroundColor: theme.colors.background,
                 },
                 headerTitle: () => <HeaderTitle navigation={navigation} />,
+                gestureResponseDistance: 400,
             })}
         >
             <SettingsStack.Screen name="Main" component={Main} />

@@ -10,6 +10,7 @@ const POST_QUERY = gql`
                 id
                 userId
             }
+            userId
         }
     }
 `

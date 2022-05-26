@@ -15,6 +15,7 @@ export type RootStackParams = {
     Settings: SettingsNavigatorParams,
     SettingsDetail: ISettings,
     Modal: undefined,
+    Chat: {chat?: any, post?: Post},
 }
 
 export type TabNavigatorParams = {
@@ -67,10 +68,11 @@ export type SearchNavigatorParams = {
     Main: undefined,
     Create: undefined,
     Edit: { post: Post }
-    Show: { post: Post },
+    Show: { post: Post, scrollY?: number },
 }
+
 export type MessagesNavigatorParams = {
-    Main: {},
+    List: undefined,
 }
 
 export type ProfileNavigatorParams = {

@@ -25,8 +25,9 @@
     "@react-navigation/native-stack": "^6.1.0",
     "@react-navigation/stack": "^6.0.11",
     "@types/apollo-upload-client": "^17.0.0",
-    "@types/react": "17.0.2",
+    "@types/react": "~17.0.21",
     "@types/react-native-snap-carousel": "^3.8.5",
+    "@types/socket.io-client": "^3.0.0",
     "apollo-upload-client": "^17.0.0",
     "expo": "^45.0.0",
     "expo-asset": "~8.5.0",
@@ -57,10 +58,12 @@
     "react-native-screens": "~3.11.1",
     "react-native-snap-carousel": "^3.9.1",
     "react-native-svg": "12.3.0",
+    "react-native-swipe-list-view": "^3.2.9",
     "react-native-tab-view": "^3.1.1",
     "react-native-web": "0.17.7",
     "react-native-webview": "11.18.1",
     "recoil": "^0.5.2",
+    "socket.io-client": "^4.5.1",
     "styled-components": "^5.3.3"
   },
   "devDependencies": {

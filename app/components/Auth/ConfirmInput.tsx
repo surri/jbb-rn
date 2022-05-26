@@ -17,7 +17,7 @@ const InputText = styled(TextInput)`
     background-color: ${(props:ITextInputStyle) => `${props.backgroundColor}`};
     border-color: ${(props:ITextInputStyle) => `${props.borderColor}`};
     border-width: 2px;
-    border-radius: 4px;
+    border-radius: 8px;
     padding: 12px 18px;
 `
 

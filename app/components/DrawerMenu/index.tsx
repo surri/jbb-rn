@@ -8,6 +8,7 @@ import TextStyles from '../styled/TextStyles'
 import { useRecoilState, useSetRecoilState } from 'recoil'
 import { isDarkState, loginState, userState } from '../../recoil/selectors'
 import { View } from '../Themed'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 interface SettingsTitle {
     color?: string;
@@ -27,9 +28,15 @@ const DrawerMenu: React.FC<DrawerContentComponentProps> = (props: DrawerContentC
         const setUser = useSetRecoilState(userState)
 
         const onLogin = () => setIsLoggin(true)
-        const onLogout = () => {
+        const onLogout = async () => {
             setUser(null)
             setIsLoggin(false)
+            await AsyncStorage.removeItem('user')
+
+            const aa = await AsyncStorage.getAllKeys()
+
+            console.log(aa)
+
         }
 
         const action = isLoggedIn ? onLogout : onLogin

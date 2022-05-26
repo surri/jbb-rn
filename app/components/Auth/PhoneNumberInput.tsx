@@ -6,6 +6,7 @@ import { useTheme } from '@react-navigation/native'
 
 
 const PrimaryTextInputContainer = styled(View)`
+    border-color: ${props => props.theme.colors.active};
     width: ${(props:ITextInputStyle) => `${props.containerWidth}`};
     margin: 12px 0;
 `

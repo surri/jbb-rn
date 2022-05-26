@@ -8,7 +8,7 @@ const SEND_AUTH_SMS = gql`
                 authNumber: $authNumber
             }
         ) {
-            username, phone, email, displayName, accessToken
+            id, username, phone, email, displayName, accessToken
         }
     }
 `
