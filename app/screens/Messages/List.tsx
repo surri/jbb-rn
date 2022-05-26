@@ -1,6 +1,6 @@
 import { useIsFocused } from '@react-navigation/native'
 import React, { useEffect, useState } from 'react'
-import { Alert, Animated, FlatList, StyleSheet, TouchableOpacity } from 'react-native'
+import { Alert, Animated, FlatList, RefreshControl, StyleSheet, TouchableOpacity } from 'react-native'
 import { useRecoilValue } from 'recoil'
 import io from 'socket.io-client'
 import styled from 'styled-components/native'
@@ -11,6 +11,8 @@ import { Text, View } from '../../components/Themed'
 import { Feather, Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import { ChatPartition } from '../../components/Card/Messages/Parts'
+import useWait from '../../hooks/useWait'
+import useChatList from '../../hooks/graphql/messages/useChatList'
 
 // const socketEndpoint = 'http://localhost:3004/messages'
 const socketEndpoint = 'https://api.jangbibbal.com/messages'
@@ -26,18 +28,26 @@ const List: React.FC = () => {
         transports: ['websocket'],
     })
 
+    const [refreshing, setRefreshing] = useState(false)
+    const wait = useWait()
 
     const isFocused = useIsFocused()
-
-
     const [chatList, setChatList] = useState()
+
+    const { data, refetch, error, called } = useChatList()
+
+    useEffect(() => {
+        const { chatList } = data || {}
+        if (chatList){
+            chatList?.edges && setChatList(chatList.edges)
+        }
+    }, [data])
+
 
     //test
     const [bell, setBell] = useState(true)
 
-
     useEffect(() => {
-        console.log('connected', socket)
         socket.on('responseChatList', (responseChatList: any) => {
             // console.log(responseChatList)
             setChatList(responseChatList)
@@ -45,7 +55,8 @@ const List: React.FC = () => {
             // setLastMessage(sendedMessage)
         })
         if (isFocused) {
-            socket.emit('requestChatList', { socketId: socket.id, userId: user.id })
+            refetch()
+            // socket.emit('requestChatList', { socketId: socket.id, userId: user.id })
         } else {
             socket.disconnect()
             socket.removeAllListeners()
@@ -161,8 +172,21 @@ const List: React.FC = () => {
         console.log('onRightActionStatusChange', rowKey)
     }
 
+    const onRefresh = () => {
+        setRefreshing(true)
+        refetch()
+        wait(1000).then(() => setRefreshing(false))
+    }
+
     return (
         <SwipeListView
+            scrollEventThrottle={16}
+            refreshControl={
+                <RefreshControl
+                    refreshing={refreshing}
+                    onRefresh={onRefresh}
+                />
+            }
             data={chatList}
             renderItem={ ({ item }, rowMap) => {
                 return (

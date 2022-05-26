@@ -24,16 +24,18 @@ interface IProps {
 const ChatCard: React.FC<IProps> = ({ chat }: IProps) => {
     const navigation = useNavigation<StackNavigationProp<RootStackParams>>()
     const {
-        id,
-        message,
-        createdAt,
+        node: {
+            id,
+            lastMessage,
+            updatedAt,
+            joinedUsers,
+        },
     } = chat
 
     return (
         <Container
             onPress={() => {
                 navigation.navigate('Chat', { chat: { id } })
-                console.log('chat')
             }}
         >
             <ThumbnailContainer>
@@ -41,14 +43,14 @@ const ChatCard: React.FC<IProps> = ({ chat }: IProps) => {
             </ThumbnailContainer>
             <InfoContainer>
                 <ProfileRow>
-                    <UserName>Eung{id}</UserName>
+                    <UserName>{joinedUsers}    No#{id}</UserName>
                 </ProfileRow>
                 <InfoRow>
-                    <Row><PostTitle>{message}</PostTitle></Row>
+                    <Row><PostTitle>{lastMessage}</PostTitle></Row>
                 </InfoRow>
             </InfoContainer>
             <DateContainer>
-                <Row><PostDate>{moment(createdAt).fromNow()}</PostDate></Row>
+                <Row><PostDate>{moment(updatedAt).fromNow()}</PostDate></Row>
             </DateContainer>
         </Container>
     )
