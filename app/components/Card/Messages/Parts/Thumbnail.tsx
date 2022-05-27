@@ -17,7 +17,7 @@ const Thumbnail = ({ url }: any) => {
 const Image = styled.Image`
     width: 60px;
     height: 60px;
-    border-radius: 20px;
+    border-radius: 30px;
     background-color: #B4B4B444;
 `
 
@@ -26,7 +26,7 @@ const EmptyProfileImage = styled.View`
     align-items: center;
     width: 60px;
     height: 60px;
-    border-radius: 20px;
+    border-radius: 30px;
     border: 3px solid ${props => props.theme.colors.active}
 `
 
