@@ -29,6 +29,7 @@ const ChatCard: React.FC<IProps> = ({ chat }: IProps) => {
             lastMessage,
             updatedAt,
             joinedUsers,
+            unread,
         },
     } = chat
 
@@ -43,7 +44,7 @@ const ChatCard: React.FC<IProps> = ({ chat }: IProps) => {
             </ThumbnailContainer>
             <InfoContainer>
                 <ProfileRow>
-                    <UserName>{joinedUsers}    No#{id}</UserName>
+                    <UserName>{joinedUsers}    No#{id} </UserName>
                 </ProfileRow>
                 <InfoRow>
                     <Row><PostTitle>{lastMessage}</PostTitle></Row>
@@ -51,6 +52,7 @@ const ChatCard: React.FC<IProps> = ({ chat }: IProps) => {
             </InfoContainer>
             <DateContainer>
                 <Row><PostDate>{moment(updatedAt).fromNow()}</PostDate></Row>
+                {!!unread && unread > 0 && <UnReadBox><UnRead>{unread}</UnRead></UnReadBox>}
             </DateContainer>
         </Container>
     )
@@ -103,5 +105,24 @@ const PostTitle = styled(TextStyles.Regular)`
     color: ${props => props.theme.colors.placeHolder};
 `
 
-const PostDate = styled(TextStyles.Regular)``
+const PostDate = styled(TextStyles.Regular)`
+    font-size: 12px;
+    text-align: right;
+`
+
+const UnReadBox = styled(Row)`
+    background: ${props => props.theme.colors.notification};
+    border-radius: 24px;
+    justify-content: center;
+    align-self: center;
+`
+
+const UnRead = styled(TextStyles.Bold)`
+    color: #ffffff;
+    font-size: 12px;
+    padding: 2px 8px;
+`
+
+
+
 export default ChatCard

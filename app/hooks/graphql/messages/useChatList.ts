@@ -16,6 +16,7 @@ const MESSAGES_QUERY = gql`
                     updatedAt
                     lastMessage
                     joinedUsers
+                    unread
                 }
                 cursor
             }

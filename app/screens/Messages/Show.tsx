@@ -4,8 +4,7 @@ import io from 'socket.io-client'
 import styled from 'styled-components/native'
 import TextStyles from '../../components/styled/TextStyles'
 import { RouteProp, useIsFocused, useTheme } from '@react-navigation/native'
-import theme from '../../theme'
-import { KeyboardAvoidingView, Text, TextInput, View } from '../../components/Themed'
+import { KeyboardAvoidingView, View } from '../../components/Themed'
 import { FlatList, Platform, SafeAreaView } from 'react-native'
 import { RootStackParams } from '../../types/navigation'
 import { useRecoilValue } from 'recoil'
@@ -13,47 +12,72 @@ import { userState } from '../../recoil/selectors'
 import moment from 'moment'
 import { useMessages } from '../../hooks/graphql/messages'
 
-// const socketEndpoint = 'http://localhost:3000/messages'
-const socketEndpoint = 'https://api.jangbibbal.com/messages'
+const socketEndpoint = 'http://localhost:3000/messages'
+// const socketEndpoint = 'https://api.jangbibbal.com/messages'
+
+type PagingMessage = {
+    node: {
+        id?: number,
+        createdAt?: string,
+        message: string,
+        mine: boolean
+    },
+    cursor?: string,
+}
+
+type PageInfo = {
+    hasNextPage: boolean,
+    hasPrevPage: boolean,
+    startCursor?: string,
+    endCursor?: string,
+}
 
 type Props = {
     route: RouteProp<RootStackParams, 'Chat'>
 }
 
 const Show: React.FC<Props> = ({ route }: Props) => {
-
     const { post, chat } = route.params || {}
-
-    const isFocused = useIsFocused()
+    // const [chat, setChat] = useState(chatParam)
+    const flatListRef = useRef(null)
     const theme = useTheme()
+    const isFocused = useIsFocused()
+
+    const user = useRecoilValue(userState)
+
     const [hasConnection, setConnection] = useState(false)
 
-    const Test =() => {
-        console.log(user)
-    }
-
-
-    const { data, error, called } = useMessages({ chatId: chat.id })
-
-    const [lastMessage, setLastMessage] = useState()
-
-
-    const [messages, setMessages] = useState()
+    const [messages, setMessages] = useState<PagingMessage[]>([])
     const [newMessage, setNewMessage] = useState('')
 
 
+    const [after, setAfter] = useState<string| undefined>()
+
+    const [pageInfo, setPageInfo] = useState<PageInfo>()
+
+    const [
+        getMessages,
+        { called, loading, data, refetch },
+    ] = useMessages({
+        chatId: Number(chat.id),
+        ...(after && { after }),
+    })
+
     useEffect(() => {
-        const { messages } = data || {}
-        if (messages){
-            messages?.edges && setMessages(messages.edges)
+        if(chat.id){
+            console.log('request useMessages',{
+                chatId: Number(chat.id),
+                ...(after && { after }),
+            })
+            getMessages().then(({ data }) => {
+                const { messages } = data || {}
+                if (messages){
+                    messages?.edges && setMessages(messages.edges)
+                    messages?.pageInfo && setPageInfo(messages.pageInfo)
+                }
+            })
         }
-    }, [data])
-
-    useEffect(() => {
-        messages && typeof messages == 'object' && messages.length > 0 && setLastMessage(messages.filter(m => m.mine && m.unread).pop())
-    }, [messages])
-
-    const flatListRef = useRef(null)
+    }, [chat, data])
 
     const socket = io(socketEndpoint, {
         transports: ['websocket'],
@@ -73,15 +97,10 @@ const Show: React.FC<Props> = ({ route }: Props) => {
             // setLastMessage(sendedMessage)
         })
 
-        socket.on('responseMessages', (data:any) => {
-            // console.log(data)
-        })
+        // socket.on('fetchNewMessage', (hasNewMessage: boolean) => hasNewMessage && refetch())
 
         if (isFocused) {
-            Test()
-            // console.log(chat)
             console.log('tesataset')
-            // socket.emit('requestMessages' )
         } else {
 
             socket.disconnect()
@@ -89,39 +108,53 @@ const Show: React.FC<Props> = ({ route }: Props) => {
         }
     }, [])
 
-
-    // socket.emit('msg', { type: 'msg', socketId: socket.id, msg: 'chatshow' })
-    //     return () => {
-    //         socket.disconnect()
-    //         socket.removeAllListeners()
-    //     }
-    // }, [])
-
-
-    useEffect(() => {
-        if(flatListRef.current){
-            flatListRef.current?.scrollToEnd()
-        }
-    },[messages])
-
-    const user = useRecoilValue(userState)
-
-
     const onSendMessage = () => {
-        // socket.emit('sendMessage', {
-        //     socketId: socket.id,
-        //     receiverId: Number(post.userId),
-        //     senderId: Number(user.id),
-        //     postId: Number(post.id),
-        //     message: newMessage,
-        // })
+        if (chat?.id) {
+            socket.emit('sendMessage', {
+                socketId: socket.id,
+                chatId: Number(chat.id),
+                senderId: Number(user.id),
+                message: newMessage,
+            })
+        } else if (post) {
+            socket.emit('createChatAndSendMessage', {
+                socketId: socket.id,
+                receiverId: Number(post.userId),
+                senderId: Number(user.id),
+                postId: Number(post.id),
+                message: newMessage,
+            })
+        }
+
+        setMessages((prevMessage) => [
+            {
+                node: {
+                    message: newMessage,
+                    mine: true,
+                },
+            },
+            ...prevMessage,
+        ])
         setNewMessage('')
         setMessageLoading(true)
     }
 
-    console.log(hasConnection, 'hasConnection')
+    const onEndReached = () => {
+        const { hasNextPage, endCursor } = pageInfo || {}
+        // console.log(endCursor)
+        // hasNextPage && setAfter(endCursor)
+    }
 
-    return hasConnection && (
+    // useEffect(() => {
+    //     getMessages().then(({ data }) => {
+    //         const { messages } = data || {}
+    //         if (messages){
+    //             messages?.edges && setMessages(messages.edges)
+    //         }
+    //     })
+    // }, [after])
+
+    return (
         <KeyboardAvoidingView
             style={{ flexGrow: 1 }}
             keyboardVerticalOffset={
@@ -136,11 +169,16 @@ const Show: React.FC<Props> = ({ route }: Props) => {
             >
                 <FlatList
                     ref={flatListRef}
-                    // onContentSizeChange={() => flatListRef?.current?.scrollToEnd()}
-                    // onLayout={() => flatListRef?.current?.scrollToEnd()}
-                    contentContainerStyle={{ flexGrow: 1 }}
+                    contentContainerStyle={{
+                        flexGrow: 1,
+                        justifyContent: 'flex-end',
+                    }}
+                    inverted
+                    scrollEventThrottle={4}
+                    onEndReachedThreshold={0.2}
+                    onEndReached={onEndReached}
                     data={messages}
-                    renderItem={({ item: { node: message } }: any) => message.mine ? (
+                    renderItem={({ item: { node: message } }: any) => message?.mine ? (
                         <MessageContainer mine={message.mine}>
                             <ReceivedTime>{moment(message.createdAt).format('hh:mm')}</ReceivedTime>
                             <View style={{ flexDirection: 'column' }}>
@@ -149,7 +187,7 @@ const Show: React.FC<Props> = ({ route }: Props) => {
                                         {message.message}
                                     </MessageText>
                                 </MessageBox>
-                                <Readed>{!message.sended && '전송실패'}{lastMessage.id == message.id && '안읽음'}</Readed>
+                                {/* <Readed>{!message.sended && '전송실패'}{lastMessage.id == message.id && '안읽음'}</Readed> */}
                             </View>
                         </MessageContainer>
                     ) : (
@@ -172,13 +210,6 @@ const Show: React.FC<Props> = ({ route }: Props) => {
                         placeholderTextColor={theme.colors.inactive}
                         onChangeText={text => setNewMessage(text)}
                         value={newMessage}
-                        onFocus={() => {
-                            setTimeout(() => {
-                                if (flatListRef.current) {
-                                    flatListRef.current.scrollToEnd()
-                                }
-                            }, 100)
-                        }}
                         onSubmitEditing={onSendMessage}
                     />
                     <SendButtonBox
@@ -250,34 +281,4 @@ const Readed = styled(TextStyles.Medium)`
     margin: 0 24px;
     color: ${(props) => props.theme.colors.placeHolder};
 `
-
-// const testMessages: any = [
-//     {
-//         id: 1,
-//         message: 'hihi',
-//         createdAt: '2022-05-23T21:20:34.000Z',
-//         unread: false,
-//     },
-//     {
-//         id: 2,
-//         message: 'hoho',
-//         mine: true,
-//         createdAt: '2022-05-23T21:22:42.000Z',
-//         unread: false,
-//     },
-//     {
-//         id: 3,
-//         message: 'who are you',
-//         createdAt: '2022-05-23T21:26:43.000Z',
-//         unread: false,
-//     },
-//     {
-//         id: 4,
-//         message: 'its me',
-//         mine: true,
-//         createdAt: '2022-05-23T21:42:12.000Z',
-//         unread: true,
-//         sended: true,
-//     },
-// ]
 export default Show

@@ -1,12 +1,13 @@
-import { gql, useQuery } from '@apollo/client'
+import { gql, useLazyQuery, useQuery } from '@apollo/client'
 
 const MESSAGES_QUERY = gql`
-    query useMessages($chatId: Int) {
+    query useMessages($chatId: Int, $after: String) {
         messages(
             chatId: $chatId
             conditions:{
                 pagination: {
-                    first: 4
+                    first: 20
+                    after: $after
                 }
             }
         ) {
@@ -15,6 +16,7 @@ const MESSAGES_QUERY = gql`
                     id
                     createdAt
                     message
+                    mine
                 }
                 cursor
             }
@@ -30,8 +32,9 @@ const MESSAGES_QUERY = gql`
 
 type Variables = {
     chatId: number,
+    after?: string,
 }
 
 export default function useMessages(variables: Variables) {
-    return useQuery(MESSAGES_QUERY, { variables })
+    return useLazyQuery(MESSAGES_QUERY, { variables })
 }

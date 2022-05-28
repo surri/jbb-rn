@@ -14,8 +14,8 @@ import { ChatPartition } from '../../components/Card/Messages/Parts'
 import useWait from '../../hooks/useWait'
 import useChatList from '../../hooks/graphql/messages/useChatList'
 
-// const socketEndpoint = 'http://localhost:3004/messages'
-const socketEndpoint = 'https://api.jangbibbal.com/messages'
+const socketEndpoint = 'http://localhost:3004/messages'
+// const socketEndpoint = 'https://api.jangbibbal.com/messages'
 
 const List: React.FC = () => {
     const [hasConnection, setConnection] = useState(false)
@@ -42,7 +42,6 @@ const List: React.FC = () => {
             chatList?.edges && setChatList(chatList.edges)
         }
     }, [data])
-
 
     //test
     const [bell, setBell] = useState(true)

@@ -1,6 +1,6 @@
 import { RouteProp, useNavigation } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components/native'
 import { Post } from '../../components/Card/Posts/PostCard'
 import { PostContents } from '../../components/Contents'
@@ -30,13 +30,16 @@ const Show: React.FC<Props> = ({ navigation, route }: Props) => {
         }
     }, [data])
 
-    const ChildComponents = () => {
+
+    const LoadingComponents = () => {
         return loading ? (
             <LoaderPostShow />
         ) : (
             <PostContents post={post}/>
         )
     }
+
+    const ChildComponents = useMemo(() => LoadingComponents, [loading])
 
     const images = [0,1,2]
     return (
