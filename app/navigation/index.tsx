@@ -1,5 +1,5 @@
 import { NavigationContainer, DefaultTheme, DarkTheme, useTheme } from '@react-navigation/native'
-import * as React from 'react'
+import React, { RefObject, useEffect } from 'react'
 
 import EditSportsModal from '../screens/EditSportsModal'
 import NotFoundScreen from '../screens/NotFoundScreen'
@@ -16,6 +16,7 @@ import theme from '../theme'
 import { Show as Chat } from '../screens/Messages'
 import { ThemeProvider } from 'styled-components/native'
 import { createStackNavigator } from '@react-navigation/stack'
+import { socket, SocketContext } from '../hooks/socket'
 
 const Drawer = createDrawerNavigator<DrawerNavigatorParams>()
 
@@ -32,29 +33,31 @@ export default function Navigation() {
     const isDark = useRecoilValue(isDarkState)
 
     return (
-        <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
-            <NavigationContainer
-                linking={LinkingConfiguration}
-                theme={isDark ? darkTheme : lightTheme}>
-                {isLoggedIn ? (
-                    <Drawer.Navigator
-                        screenOptions={{
-                            headerShown: false,
-                            drawerPosition: 'right',
-                            drawerStyle: {
-                                backgroundColor: 'transparent',
-                            },
-                        }}
-                        drawerContent={props => <DrawerMenu {...props} />}
-                    >
-                        <Drawer.Screen name="RootNavigator" component={RootNavigator} />
-                    </Drawer.Navigator>
-                ) : (
-                    <AuthNavigator />
-                )}
-                <StatusBar style="light" />
-            </NavigationContainer>
-        </ThemeProvider>
+        <SocketContext.Provider value={socket}>
+            <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
+                <NavigationContainer
+                    linking={LinkingConfiguration}
+                    theme={isDark ? darkTheme : lightTheme}>
+                    {isLoggedIn ? (
+                        <Drawer.Navigator
+                            screenOptions={{
+                                headerShown: false,
+                                drawerPosition: 'right',
+                                drawerStyle: {
+                                    backgroundColor: 'transparent',
+                                },
+                            }}
+                            drawerContent={props => <DrawerMenu {...props} />}
+                        >
+                            <Drawer.Screen name="RootNavigator" component={RootNavigator} />
+                        </Drawer.Navigator>
+                    ) : (
+                        <AuthNavigator />
+                    )}
+                    <StatusBar style="light" />
+                </NavigationContainer>
+            </ThemeProvider>
+        </SocketContext.Provider>
     )
 }
 

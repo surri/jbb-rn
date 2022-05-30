@@ -1,19 +1,18 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import Animated from 'react-native-reanimated'
-import io from 'socket.io-client'
 import styled from 'styled-components/native'
 import TextStyles from '../../components/styled/TextStyles'
 import { RouteProp, useIsFocused, useTheme } from '@react-navigation/native'
-import { KeyboardAvoidingView, View } from '../../components/Themed'
+import { KeyboardAvoidingView } from '../../components/Themed'
 import { FlatList, Platform, SafeAreaView } from 'react-native'
 import { RootStackParams } from '../../types/navigation'
 import { useRecoilValue } from 'recoil'
 import { userState } from '../../recoil/selectors'
-import moment from 'moment'
 import { useMessages } from '../../hooks/graphql/messages'
+import MessageCard from '../../components/Card/Messages/MessageCard'
+import { StackNavigationProp } from '@react-navigation/stack'
+import { useSocket } from '../../hooks/socket'
 
-const socketEndpoint = 'http://localhost:3000/messages'
-// const socketEndpoint = 'https://api.jangbibbal.com/messages'
 
 type PagingMessage = {
     node: {
@@ -34,16 +33,20 @@ type PageInfo = {
 
 type Props = {
     route: RouteProp<RootStackParams, 'Chat'>
+    navigation: StackNavigationProp<RootStackParams, 'Chat'>,
 }
 
-const Show: React.FC<Props> = ({ route }: Props) => {
+const Show: React.FC<Props> = ({ route, navigation }: Props) => {
     const { post, chat } = route.params || {}
+
     // const [chat, setChat] = useState(chatParam)
     const flatListRef = useRef(null)
     const theme = useTheme()
     const isFocused = useIsFocused()
 
     const user = useRecoilValue(userState)
+
+    const socket = useSocket()
 
     const [hasConnection, setConnection] = useState(false)
 
@@ -65,10 +68,6 @@ const Show: React.FC<Props> = ({ route }: Props) => {
 
     useEffect(() => {
         if(chat.id){
-            console.log('request useMessages',{
-                chatId: Number(chat.id),
-                ...(after && { after }),
-            })
             getMessages().then(({ data }) => {
                 const { messages } = data || {}
                 if (messages){
@@ -79,51 +78,58 @@ const Show: React.FC<Props> = ({ route }: Props) => {
         }
     }, [chat, data])
 
-    const socket = io(socketEndpoint, {
-        transports: ['websocket'],
-    })
-
-    socket.io.on('open', () => setConnection(true))
-    socket.io.on('close', () => setConnection(false))
-
     const [messageLoading, setMessageLoading] = useState(false)
     const [messageResult, setMessageResult] = useState(false)
 
-    useEffect(() => {
-        socket.on('sended', (sended: boolean) => {
-            setMessageLoading(false)
-            setMessageResult(sended)
-            // setMessages(prevMessages => prevMessages.concat(sendedMessage))
-            // setLastMessage(sendedMessage)
-        })
-
-        // socket.on('fetchNewMessage', (hasNewMessage: boolean) => hasNewMessage && refetch())
-
-        if (isFocused) {
-            console.log('tesataset')
-        } else {
-
-            socket.disconnect()
-            socket.removeAllListeners()
-        }
-    }, [])
-
-    const onSendMessage = () => {
-        if (chat?.id) {
-            socket.emit('sendMessage', {
+    useMemo(() => {
+        if (socket) {
+            socket.emit('joinRoom', {
                 socketId: socket.id,
                 chatId: Number(chat.id),
                 senderId: Number(user.id),
-                message: newMessage,
             })
-        } else if (post) {
-            socket.emit('createChatAndSendMessage', {
-                socketId: socket.id,
-                receiverId: Number(post.userId),
-                senderId: Number(user.id),
-                postId: Number(post.id),
-                message: newMessage,
+            socket.emit('testList')
+            // socket.on('sended', (sended: boolean) => {
+            //     setMessageLoading(false)
+            //     setMessageResult(sended)
+            //     // setMessages(prevMessages => prevMessages.concat(sendedMessage))
+            //     // setLastMessage(sendedMessage)
+            // })
+
+            socket.on('Test', (test: any) => {
+                console.log(test,'test')
+            // setMessages(prevMessages => prevMessages.concat(sendedMessage))
+            // setLastMessage(sendedMessage)
             })
+            socket.on('fetchNewMessage', (hasNewMessage: any) => hasNewMessage && refetch())
+        }
+    }, [socket])
+
+    // useEffect(() =>
+    //     navigation.addListener('beforeRemove', (e) => {
+    //         if( socket) {
+    //             socket.disconnect()
+    //             socket.removeAllListeners()
+    //         }
+    //     }),[navigation])
+    const onSendMessage = () => {
+        if( socket) {
+            if (chat?.id) {
+                socket.emit('sendMessage', {
+                    socketId: socket.id,
+                    chatId: Number(chat.id),
+                    senderId: Number(user.id),
+                    message: newMessage,
+                })
+            } else if (post) {
+                socket.emit('createChatAndSendMessage', {
+                    socketId: socket.id,
+                    receiverId: Number(post.userId),
+                    senderId: Number(user.id),
+                    postId: Number(post.id),
+                    message: newMessage,
+                })
+            }
         }
 
         setMessages((prevMessage) => [
@@ -145,15 +151,6 @@ const Show: React.FC<Props> = ({ route }: Props) => {
         // hasNextPage && setAfter(endCursor)
     }
 
-    // useEffect(() => {
-    //     getMessages().then(({ data }) => {
-    //         const { messages } = data || {}
-    //         if (messages){
-    //             messages?.edges && setMessages(messages.edges)
-    //         }
-    //     })
-    // }, [after])
-
     return (
         <KeyboardAvoidingView
             style={{ flexGrow: 1 }}
@@ -169,6 +166,7 @@ const Show: React.FC<Props> = ({ route }: Props) => {
             >
                 <FlatList
                     ref={flatListRef}
+                    keyboardDismissMode='on-drag'
                     contentContainerStyle={{
                         flexGrow: 1,
                         justifyContent: 'flex-end',
@@ -178,31 +176,7 @@ const Show: React.FC<Props> = ({ route }: Props) => {
                     onEndReachedThreshold={0.2}
                     onEndReached={onEndReached}
                     data={messages}
-                    renderItem={({ item: { node: message } }: any) => message?.mine ? (
-                        <MessageContainer mine={message.mine}>
-                            <ReceivedTime>{moment(message.createdAt).format('hh:mm')}</ReceivedTime>
-                            <View style={{ flexDirection: 'column' }}>
-                                <MessageBox backgroundColor={theme.colors.active}>
-                                    <MessageText color={theme.colors.background}>
-                                        {message.message}
-                                    </MessageText>
-                                </MessageBox>
-                                {/* <Readed>{!message.sended && '전송실패'}{lastMessage.id == message.id && '안읽음'}</Readed> */}
-                            </View>
-                        </MessageContainer>
-                    ) : (
-                        <MessageContainer mine={message.mine}>
-                            <MessageBox backgroundColor={theme.colors.inactive}>
-                                <MessageText color={theme.colors.text}>
-                                    {message.message}
-                                </MessageText>
-                            </MessageBox>
-                            <View style={{ flexDirection: 'column' }}>
-                                <Readed> </Readed>
-                                <ReceivedTime>{moment(message.createdAt).format('hh:mm')}</ReceivedTime>
-                            </View>
-                        </MessageContainer>
-                    )}
+                    renderItem={({ item }) => <MessageCard message={item}/>}
                 />
                 <MessageInputContainer>
                     <MessageInput
@@ -252,33 +226,8 @@ const MessageInputContainer = styled(Animated.View)`
 const MessageInput = styled.TextInput`
     flex: 1;
     padding: 12px 20px;
+    color: ${props => props.theme.colors.text};
     font-family: 'notosans-medium';
 `
 
-const MessageContainer = styled.View`
-    flex-direction: row;
-    align-self: ${(props: StyledMessage) => props.mine ? 'flex-end' : 'flex-start'};
-    align-items: center;
-`
-
-const MessageBox = styled.View`
-    background-color: ${(props: StyledMessage) => props.backgroundColor};
-    padding: 12px;
-    margin: 8px 12px;
-    border-radius: 24px;
-`
-
-const MessageText = styled(TextStyles.Medium)`
-    color: ${(props: StyledMessage) => props.color};
-`
-
-const ReceivedTime = styled(TextStyles.Medium)`
-    color: ${(props) => props.theme.colors.placeHolder};
-`
-
-const Readed = styled(TextStyles.Medium)`
-    align-self: flex-end;
-    margin: 0 24px;
-    color: ${(props) => props.theme.colors.placeHolder};
-`
 export default Show

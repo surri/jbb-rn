@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { RefObject } from 'react'
 import styled from 'styled-components/native'
 import TextStyles from '../../styled/TextStyles'
 import moment from 'moment'
@@ -7,21 +7,14 @@ import { useNavigation } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import { RootStackParams } from '../../../types/navigation'
 import { Thumbnail } from './Parts'
-
-export type Post = {
-    id: number,
-    title: string,
-    contents: string,
-    author: string,
-    createdAt: string,
-    userId: number,
-}
+import { Socket } from 'socket.io-client'
 
 interface IProps {
     chat: any
+    socket: Socket
 }
 
-const ChatCard: React.FC<IProps> = ({ chat }: IProps) => {
+const ChatCard: React.FC<IProps> = ({ chat, socket }: IProps) => {
     const navigation = useNavigation<StackNavigationProp<RootStackParams>>()
     const {
         node: {
@@ -36,7 +29,7 @@ const ChatCard: React.FC<IProps> = ({ chat }: IProps) => {
     return (
         <Container
             onPress={() => {
-                navigation.navigate('Chat', { chat: { id } })
+                navigation.navigate('Chat', { chat: { id }, socket })
             }}
         >
             <ThumbnailContainer>

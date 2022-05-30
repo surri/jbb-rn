@@ -4,6 +4,7 @@ import { StackNavigationProp } from '@react-navigation/stack'
 import { BottomTabNavigationProp, BottomTabScreenProps } from '@react-navigation/bottom-tabs'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { Post } from '../components/Card/Posts/PostCard'
+import { Socket } from 'socket.io-client'
 
 export type DrawerNavigatorParams = {
     RootNavigator: RootStackParams,
@@ -15,7 +16,7 @@ export type RootStackParams = {
     Settings: SettingsNavigatorParams,
     SettingsDetail: ISettings,
     Modal: undefined,
-    Chat: {chat?: any, post?: Post},
+    Chat: {chat?: any, post?: Post, socket: RefObject<Socket>},
 }
 
 export type TabNavigatorParams = {

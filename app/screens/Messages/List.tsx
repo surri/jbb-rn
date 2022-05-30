@@ -1,81 +1,81 @@
 import { useIsFocused } from '@react-navigation/native'
-import React, { useEffect, useState } from 'react'
-import { Alert, Animated, FlatList, RefreshControl, StyleSheet, TouchableOpacity } from 'react-native'
+import React, { useContext, useEffect, useState } from 'react'
+import { Alert, Animated, RefreshControl, TouchableOpacity } from 'react-native'
 import { useRecoilValue } from 'recoil'
-import io from 'socket.io-client'
-import styled from 'styled-components/native'
 import ChatCard from '../../components/Card/Messages/ChatCard'
 import { userState } from '../../recoil/selectors'
 import { SwipeListView } from 'react-native-swipe-list-view'
-import { Text, View } from '../../components/Themed'
 import { Feather, Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import { ChatPartition } from '../../components/Card/Messages/Parts'
 import useWait from '../../hooks/useWait'
 import useChatList from '../../hooks/graphql/messages/useChatList'
+import { useSocket } from '../../hooks/socket'
 
-const socketEndpoint = 'http://localhost:3004/messages'
-// const socketEndpoint = 'https://api.jangbibbal.com/messages'
+type Chat = {
+    node :{
+        id: number,
+        updatedAt: string,
+        lastMessage: string,
+        joinedUsers: string,
+        unread: number,
+    },
+    cursor: string
+}
 
 const List: React.FC = () => {
     const [hasConnection, setConnection] = useState(false)
-    const [time, setTime] = useState<string | null>(null)
+
     const user = useRecoilValue(userState)
 
     const theme = useTheme()
 
-    const socket = io(socketEndpoint, {
-        transports: ['websocket'],
-    })
+    const socket = useSocket()
+
+    // console.log(socket)
 
     const [refreshing, setRefreshing] = useState(false)
     const wait = useWait()
 
     const isFocused = useIsFocused()
-    const [chatList, setChatList] = useState()
+    const [chatList, setChatList] = useState<Chat[]>([])
 
     const { data, refetch, error, called } = useChatList()
 
     useEffect(() => {
         const { chatList } = data || {}
-        if (chatList){
-            chatList?.edges && setChatList(chatList.edges)
-        }
+        chatList?.edges && setChatList(chatList.edges)
     }, [data])
 
     //test
     const [bell, setBell] = useState(true)
 
     useEffect(() => {
-        socket.on('responseChatList', (responseChatList: any) => {
-            // console.log(responseChatList)
-            setChatList(responseChatList)
-            // setMessages(prevMessages => prevMessages.concat(sendedMessage))
-            // setLastMessage(sendedMessage)
-        })
-        if (isFocused) {
-            refetch()
-            // socket.emit('requestChatList', { socketId: socket.id, userId: user.id })
-        } else {
-            socket.disconnect()
-            socket.removeAllListeners()
-        }
+        isFocused && refetch()
     }, [isFocused])
 
-    socket.io.on('open', () => setConnection(true))
-    socket.io.on('close', () => setConnection(false))
+    useEffect(() => {
+        if(socket) {
+            socket.on('responseChatList', (responseChatList: any) => {
+                setChatList(responseChatList)
+            })
 
-    socket.on('msg', (data) => {
-        // console.log(data.message)
-    })
+            socket.on('fetchChatList', (data) => {
+                data && refetch()
+            })
 
-    const closeRow = (rowMap, rowKey) => {
+            socket.io.on('open', () => setConnection(true))
+            socket.io.on('close', () => setConnection(false))
+        }
+    }, [])
+
+    const closeRow = (rowMap: any, rowKey: any) => {
         if (rowMap[rowKey]) {
             rowMap[rowKey].closeRow()
         }
     }
 
-    const deleteRow = (rowMap, rowKey) => {
+    const deleteRow = (rowMap: any, rowKey: any) => {
         closeRow(rowMap, rowKey)
         // const newData = [...listData]
         // const prevIndex = listData.findIndex(item => item.key === rowKey)
@@ -150,7 +150,7 @@ const List: React.FC = () => {
             </Animated.View>
         )
     }
-    const renderHiddenItem = (data, rowMap) => {
+    const renderHiddenItem = (data: any, rowMap: any) => {
         const rowActionAnimatedValue = new Animated.Value(80)
 
         return (
@@ -164,10 +164,10 @@ const List: React.FC = () => {
         )
     }
 
-    const onRightAction = rowKey => {
+    const onRightAction = (rowKey: any) => {
         console.log('onRightAction', rowKey)
     }
-    const onRightActionStatusChange = rowKey => {
+    const onRightActionStatusChange = (rowKey: any) => {
         console.log('onRightActionStatusChange', rowKey)
     }
 
@@ -178,7 +178,7 @@ const List: React.FC = () => {
     }
 
     return (
-        <SwipeListView
+        <SwipeListView<Chat[]>
             scrollEventThrottle={16}
             refreshControl={
                 <RefreshControl
@@ -191,6 +191,7 @@ const List: React.FC = () => {
                 return (
                     <ChatCard
                         chat={item}
+                        socket={socket}
                     />
                 )
             }}
