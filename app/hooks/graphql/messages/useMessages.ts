@@ -17,6 +17,7 @@ const MESSAGES_QUERY = gql`
                     createdAt
                     message
                     mine
+                    unread
                 }
                 cursor
             }

@@ -5,7 +5,7 @@ const MESSAGES_QUERY = gql`
         chatList(
             conditions:{
                 pagination: {
-                    first: 4
+                    first: 12
                     after: $after
                 }
             }
