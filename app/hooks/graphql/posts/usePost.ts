@@ -6,11 +6,17 @@ const POST_QUERY = gql`
             id
             title
             contents
+            price
+            author
             comments {
                 id
                 userId
             }
+            mine
             userId
+            chat {
+                id
+            }
         }
     }
 `

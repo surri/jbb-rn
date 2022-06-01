@@ -168,7 +168,8 @@ const TitleInput = styled(TextInput)`
     padding: 12px;
     border-radius: 8px;
     margin: 16px 0;
-    font-size: 20px;
+    font-size: 16px;
+    font-family: 'notosans-bold';
 `
 
 const ContentsInput = styled(TextInput)`
@@ -176,5 +177,5 @@ const ContentsInput = styled(TextInput)`
     border-radius: 8px;
     margin: 16px 0;
     height: 280px;
-    font-size: 20px;
+    font-size: 16px;
 `

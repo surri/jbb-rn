@@ -134,13 +134,8 @@ const Create: React.FC<Props> = ({ navigation, route }: Props) => {
                     max={4}
                 />
             </Container>
-            <ButtonContainer
-                style={{ borderColor: theme.colors.active }}
-                onPress={handleSubmit(onSubmit)}
-            >
-                <ButtonText style={{ color: theme.colors.active }}>
-                    작성완료
-                </ButtonText>
+            <ButtonContainer onPress={handleSubmit(onSubmit)}>
+                <ButtonText>작성완료</ButtonText>
             </ButtonContainer>
         </KeyboardAvoidingView>
     )
@@ -159,6 +154,7 @@ const ButtonContainer = styled(Button)`
     padding: 12px;
     margin: 12px;
     border-radius: 12px;
+    border-color: ${props => props.theme.colors.active};
 `
 
 const ContentsContainer = styled(View)`
@@ -166,6 +162,7 @@ const ContentsContainer = styled(View)`
 `
 
 const ButtonText = styled(TextStyles.Medium)`
+    color: ${props => props.theme.colors.active};
     font-size: 16px;
 `
 
@@ -173,7 +170,8 @@ const TitleInput = styled(TextInput)`
     padding: 12px;
     border-radius: 8px;
     margin: 16px 0;
-    font-size: 20px;
+    font-size: 16px;
+    font-family: 'notosans-bold';
 `
 
 const ContentsInput = styled(TextInput)`
@@ -181,5 +179,5 @@ const ContentsInput = styled(TextInput)`
     border-radius: 8px;
     margin: 16px 0;
     height: 280px;
-    font-size: 20px;
+    font-size: 16px;
 `

@@ -15,8 +15,12 @@ const POSTS_QUERY = gql`
                 node {
                     id
                     title
+                    price
                     author
                     createdAt
+                    mine
+                    likes
+                    like
                 }
                 cursor
             }
