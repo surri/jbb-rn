@@ -1,23 +1,31 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components/native'
 import TextStyles from '../../styled/TextStyles'
 import { Card } from '../../Themed'
-import { Profile, Thumbnail } from './Parts'
+import { Thumbnail, UserCard } from './Parts'
 import moment from 'moment'
 import 'moment/locale/ko'
 import { useNavigation } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import { SearchNavigatorParams } from '../../../types/navigation'
-import { Feather } from '@expo/vector-icons'
+import { Feather, FontAwesome } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
+import useUpdatePostsLike from '../../../hooks/graphql/posts/useUpdatePostLike'
 
 export type Post = {
     id: number,
     title: string,
     contents: string,
+    price: number,
     author: string,
     createdAt: string,
     userId: number,
+    likes: number,
+    like: boolean,
+    chat: {
+        id: number
+    }
+    mine: boolean,
 }
 
 interface IProps {
@@ -30,13 +38,39 @@ const PostCard: React.FC<IProps> = ({ post }: IProps) => {
     const navigation = useNavigation<StackNavigationProp<SearchNavigatorParams>>()
     const {
         node: {
+            id: postId,
             createdAt,
             title,
+            price,
             author,
+            mine,
+            likes,
+            like,
+            userId,
         },
     } = post
 
     const theme = useTheme()
+
+    const [updatePostsLike] = useUpdatePostsLike()
+
+    const [acitiveLike, setActiveLike] = useState(like)
+    const [likeCount, setLikeCount] = useState(likes)
+
+    const onPressLike = async () => {
+        setActiveLike(prevLike => !prevLike)
+        try {
+            await updatePostsLike({
+                variables: { postId: Number(postId) },
+            }).then(({ data }) => {
+                setActiveLike(data.updatePostsLike.like) //sync server data double check
+                setLikeCount(data.updatePostsLike.likes)
+            }).catch(err =>console.log(JSON.stringify(err),'err'))
+        } catch (e) {
+            console.log(e,'e')
+            // setStatus('Error')
+        }
+    }
 
     return (
         <Container
@@ -47,19 +81,25 @@ const PostCard: React.FC<IProps> = ({ post }: IProps) => {
             </ThumbnailContainer>
             <InfoContainer>
                 <ProfileRow>
-                    <Profile
-                        name={author}
-                    />
+                    <UserCard user={{ userId, author }} />
                     <Row><PostDate>{moment(createdAt).fromNow()}</PostDate></Row>
                 </ProfileRow>
                 <InfoRow>
                     <Row><PostTitle>{title}</PostTitle></Row>
                 </InfoRow>
                 <InfoRow>
-                    <Row><Price>20,000원</Price></Row>
-                    <Row>
-                        <Feather name="heart" size={16} color={theme.colors.placeHolder} />
-                    </Row>
+                    <Row><Price>{price ? `${price.toLocaleString('ko-KR')}원` : '무료나눔'}</Price></Row>
+                    {!mine && (
+                        <LikeButton
+                            onPress={onPressLike}
+                        >
+                            {acitiveLike
+                                ? <ActiveLikeIcon name="heart" size={16} color={theme.colors.active} />
+                                : <LikeIcon name="heart" size={16} color={theme.colors.placeHolder} />
+                            }
+                            <LikeCount>{likeCount}</LikeCount>
+                        </LikeButton>
+                    )}
                 </InfoRow>
             </InfoContainer>
         </Container>
@@ -109,4 +149,24 @@ const PostTitle = styled(TextStyles.Regular)`
 `
 
 const PostDate = styled(TextStyles.Regular)``
+
+
+const LikeButton = styled.TouchableOpacity`
+    flex-direction: row;
+    align-items: center;
+`
+
+const LikeIcon = styled(Feather)`
+    margin-right: 4px;
+`
+const ActiveLikeIcon = styled(FontAwesome)`
+    margin-right: 4px;
+`
+
+const LikeCount = styled(TextStyles.Regular)`
+    font-size: 14px;
+    color: ${props => props.theme.colors.placeHolder};
+    padding-bottom: 2px;
+`
+
 export default PostCard

@@ -1,9 +1,9 @@
 import Thumbnail from './Thumbnail'
 import PostsPartition from './PostsPartition'
-import Profile from './Profile'
+import UserCard from './UserCard'
 
 export {
-    Profile,
+    UserCard,
     Thumbnail,
     PostsPartition,
 }

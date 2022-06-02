@@ -5,12 +5,14 @@ import { Animated, Dimensions, NativeScrollEvent, NativeSyntheticEvent, Platform
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import Carousel, { Pagination } from 'react-native-snap-carousel'
 import { SearchNavigatorParams } from '../types/navigation'
+import { useTheme } from '@react-navigation/native'
 
 const HeaderCarouselScrollView = ({ images, childComponents, data, renderItem }: any) => {
     const navigation = useNavigation<StackNavigationProp<SearchNavigatorParams, 'Show'>>()
     const width = Dimensions.get('window').width
     const [activeIndex, setActiveIndex] = useState(0)
     const scrollY = useRef(new Animated.Value(0)).current
+    const theme = useTheme()
 
     const onScroll = Animated.event(
         [{ nativeEvent: { contentOffset: { y: scrollY } } }],
@@ -32,7 +34,7 @@ const HeaderCarouselScrollView = ({ images, childComponents, data, renderItem }:
                         <Animated.View
                             style={{
                                 position: 'absolute',
-                                backgroundColor: '#ffffff',
+                                backgroundColor: theme.colors.background,
                                 borderBottomWidth: 2,
                                 width: '100%',
                                 height: Platform.select({
