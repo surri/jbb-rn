@@ -1,5 +1,5 @@
 import React from 'react'
-import { useTheme } from '@react-navigation/native'
+import { useNavigation, useTheme } from '@react-navigation/native'
 
 // import * as loginActions from '../store/actions/loginActions';
 import { DrawerContentComponentProps } from '@react-navigation/drawer'
@@ -9,6 +9,9 @@ import { useRecoilState, useSetRecoilState } from 'recoil'
 import { isDarkState, loginState, userState } from '../../recoil/selectors'
 import { View } from '../Themed'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { Switch } from 'react-native'
+import { StackNavigationProp } from '@react-navigation/stack'
+import { RootStackParams } from '../../types/navigation'
 
 interface SettingsTitle {
     color?: string;
@@ -19,9 +22,9 @@ interface MenuLabel {
 }
 
 
-const DrawerMenu: React.FC<DrawerContentComponentProps> = (props: DrawerContentComponentProps) => {
+const DrawerMenu: React.FC<DrawerContentComponentProps> = () => {
     const theme = useTheme()
-    const { navigation } = props
+    const navigation = useNavigation<StackNavigationProp<RootStackParams>>()
 
     const AuthButton = () => {
         const [isLoggedIn, setIsLoggin] = useRecoilState(loginState)
@@ -32,11 +35,6 @@ const DrawerMenu: React.FC<DrawerContentComponentProps> = (props: DrawerContentC
             setUser(null)
             setIsLoggin(false)
             await AsyncStorage.removeItem('user')
-
-            const aa = await AsyncStorage.getAllKeys()
-
-            console.log(aa)
-
         }
 
         const action = isLoggedIn ? onLogout : onLogin
@@ -57,30 +55,34 @@ const DrawerMenu: React.FC<DrawerContentComponentProps> = (props: DrawerContentC
         const setLight = () => setIsDark(false)
 
         const action = isDark ? setLight : setDark
-        const label = isDark ? '라이트모드' : '다크모드'
 
         return (
             <SettingMenu>
-                <SettingMenu onPress={action}>
-                    <MenuLabel color={theme.colors.text}>{label}</MenuLabel>
-                </SettingMenu>
+                <Switch
+                    trackColor={{ false: theme.colors.inactive, true: theme.colors.active }}
+                    thumbColor='#ffffff'
+                    ios_backgroundColor={theme.colors.inactive}
+                    onValueChange={action}
+                    value={isDark}
+                />
             </SettingMenu>
         )
     }
 
     const menus = [
-        { label: '계정관리', navigation: 'Account'  },
-        { label: '알림설정', navigation: 'Notifications'  },
+        { label: '알림설정', screen: 'Notification'  },
+        { label: '정보변경', screen: 'Account'  },
+        { label: '계정삭제', screen: 'Withdrawal'  },
     ]
 
-    const toNavigation = (name: string) => {
-        navigation.navigate(name)
+    const toNavigation = (screen: string) => {
+        navigation.navigate('SettingsNavigator', { screen } )
     }
 
     return (
         <Container>
             {menus.map((menu, index) => (
-                <SettingMenu key={index} onPress={() => toNavigation(menu.navigation)}>
+                <SettingMenu key={index} onPress={() => toNavigation(menu.screen)}>
                     {index > 0 && <Partition />}
                     <MenuLabel color={theme.colors.text}>{menu.label}</MenuLabel>
                 </SettingMenu>

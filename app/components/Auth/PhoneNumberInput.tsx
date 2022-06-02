@@ -42,6 +42,7 @@ const PhoneNumberInput: React.FC<IProps> = ({
     onChangeText,
     value,
     placeholder,
+    onSubmitEditing,
 }: IProps) => {
     const theme = useTheme()
     return (
@@ -58,6 +59,7 @@ const PhoneNumberInput: React.FC<IProps> = ({
                 value={value}
                 placeholder={placeholder}
                 placeholderTextColor={theme.colors.inactive}
+                onSubmitEditing={onSubmitEditing}
             />
         </PrimaryTextInputContainer>
     )

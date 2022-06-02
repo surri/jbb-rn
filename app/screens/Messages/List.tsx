@@ -191,7 +191,6 @@ const List: React.FC = () => {
                 return (
                     <ChatCard
                         chat={item}
-                        socket={socket}
                     />
                 )
             }}

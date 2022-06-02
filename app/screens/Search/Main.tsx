@@ -46,9 +46,6 @@ const Main: React.FC<Props> = ({ navigation }: Props) => {
 
     const isFocused = useIsFocused()
 
-
-
-
     useEffect(() => {
         isFocused && refetch()
     },[isFocused])

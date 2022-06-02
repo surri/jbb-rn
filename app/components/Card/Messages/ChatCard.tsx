@@ -11,10 +11,9 @@ import { Socket } from 'socket.io-client'
 
 interface IProps {
     chat: any
-    socket: Socket
 }
 
-const ChatCard: React.FC<IProps> = ({ chat, socket }: IProps) => {
+const ChatCard: React.FC<IProps> = ({ chat }: IProps) => {
     const navigation = useNavigation<StackNavigationProp<RootStackParams>>()
     const {
         node: {
@@ -29,7 +28,7 @@ const ChatCard: React.FC<IProps> = ({ chat, socket }: IProps) => {
     return (
         <Container
             onPress={() => {
-                navigation.navigate('Chat', { chat: { id }, socket })
+                navigation.navigate('Chat', { chat: { id } })
             }}
         >
             <ThumbnailContainer>

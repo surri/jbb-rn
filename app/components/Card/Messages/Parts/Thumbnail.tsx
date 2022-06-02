@@ -9,7 +9,7 @@ const Thumbnail = ({ url }: any) => {
         <Image source={require('../../../../../assets/images/profile-background-golf.jpg') }/>
     ) : (
         <EmptyProfileImage>
-            <FontAwesome name="user" size={40} color={theme.colors.active} />
+            <FontAwesome name="user" size={40} color={theme.colors.inactive} />
         </EmptyProfileImage>
     )
 }
@@ -27,7 +27,7 @@ const EmptyProfileImage = styled.View`
     width: 60px;
     height: 60px;
     border-radius: 30px;
-    border: 3px solid ${props => props.theme.colors.active}
+    border: 3px solid ${props => props.theme.colors.inactive}
 `
 
 export default Thumbnail

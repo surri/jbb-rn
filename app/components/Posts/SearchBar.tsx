@@ -71,7 +71,6 @@ const SearchBar: React.FC<ISearchBar> = ({
                 <SearchInputBox
                     onFocus={() => setSearchBarActive(true)}
                     onBlur={() => setSearchBarActive(false)}
-                    color={theme.colors.text}
                     onChangeText={(value) => setSearchKeyword(value)}
                     placeholder={'Search'}
                     placeholderTextColor={theme.colors.placeHolder}
@@ -85,20 +84,12 @@ const SearchBar: React.FC<ISearchBar> = ({
                     color={theme.colors.active}
                     style={{
                         backgroundColor: theme.colors.background,
-                        borderRadius: 20,
                         overflow: 'hidden',
                     }}
                 />
             </CreatePostContainer>
         </SearchAnimatedContainer>
     )
-}
-
-type ITextInputStyle = {
-    color?: string,
-    backgroundColor?: string,
-    borderColor?: string,
-    containerWidth?: string,
 }
 
 const SearchAnimatedContainer = styled(Animated.View)`
@@ -124,13 +115,13 @@ const CreatePostContainer= styled(TouchableOpacity)`
 `
 
 const SearchIcon = styled(Entypo)`
-    padding: 10px;
+    padding: 8px 4px 8px 10px;
 `
 
 const SearchInputBox = styled.TextInput`
     flex: 1;
-    padding: 10px 10px 10px 0;
-    color: ${(props:ITextInputStyle) => `${props.color}`};
+    padding: 6px 6px 6px 0;
+    color: ${props => props.theme.colors.text};
     font-weight: bold;
 `
 
