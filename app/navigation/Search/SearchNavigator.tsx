@@ -1,6 +1,6 @@
 import { createStackNavigator, StackNavigationProp } from '@react-navigation/stack'
-import { RouteProp, useTheme } from '@react-navigation/native'
-import { SearchNavigatorParams } from '../../types/navigation'
+import { RouteProp, useNavigation, useTheme } from '@react-navigation/native'
+import { RootStackParams, SearchNavigatorParams } from '../../types/navigation'
 import { Create, Edit, Main, Show } from '../../screens/Search'
 import { ActionSheetIOS, Pressable, TouchableOpacity, View } from 'react-native'
 import { FontAwesome, Entypo } from '@expo/vector-icons'
@@ -21,41 +21,63 @@ type Props = {
 
 const SearchNavigator: React.FC<Props> = ({ navigation, route }: Props) => {
     const theme = useTheme()
-    const selectedSports = useRecoilValue<any>(selectedSportsState)
+
+    const selectedSports = useRecoilValue(selectedSportsState)
+
+    const rootNavigation = useNavigation<StackNavigationProp<RootStackParams>>()
 
     const { showActionSheetWithOptions } = useActionSheet()
     const [deletePost, { data, loading, error }] = useDeletePost()
 
-    const onEditPostMenu = (post: Post) =>
-        ActionSheetIOS.showActionSheetWithOptions(
-            {
-                options: ['닫기', '수정', '삭제'],
-                destructiveButtonIndex: 2,
-                cancelButtonIndex: 0,
-                userInterfaceStyle: theme.dark ? 'dark' : 'light',
-            },
-            async buttonIndex => {
-                if (buttonIndex === 0) {
-                    // cancel action
-                } else if (buttonIndex === 1) {
-                    console.log(post,'button')
-                    navigation.navigate('Edit', { post })
-                } else if (buttonIndex === 2) {
-                    try {
-                        await deletePost({
-                            variables: { id: Number(post.id) },
-                        }).then(({ data }) => {
-                            if (data.deletePost) {
-                                navigation.goBack()
-                            }
-                        }).catch(err =>console.log(JSON.stringify(err),'err'))
-                    } catch (e) {
-                        console.log(e,'e')
-                    }
+    const onPostMenu = (post: Post) => {
+        const { mine } = post
+        return mine ? onEditPostMenu(post) : onReportPostMenu(post)
+    }
+
+    const onReportPostMenu = (post: Post) => ActionSheetIOS.showActionSheetWithOptions(
+        {
+            options: ['닫기', '신고하기', '차단하기'],
+            destructiveButtonIndex: 1,
+            cancelButtonIndex: 0,
+            userInterfaceStyle: theme.dark ? 'dark' : 'light',
+        },
+        async buttonIndex => {
+            if (buttonIndex === 1) {
+                rootNavigation.navigate('ReportsNavigator', { screen: 'Category', post })
+            } else if (buttonIndex === 2) {
+                //todo blind
+            }
+        },
+    )
+
+    const onEditPostMenu = (post: Post) => ActionSheetIOS.showActionSheetWithOptions(
+        {
+            options: ['닫기', '수정', '삭제'],
+            destructiveButtonIndex: 2,
+            cancelButtonIndex: 0,
+            userInterfaceStyle: theme.dark ? 'dark' : 'light',
+        },
+        async buttonIndex => {
+            if (buttonIndex === 1) {
+                navigation.navigate('Edit', { post })
+            } else if (buttonIndex === 2) {
+                try {
+                    await deletePost({
+                        variables: { id: Number(post.id) },
+                    }).then(({ data }) => {
+                        if (data.deletePost) {
+                            navigation.goBack()
+                        }
+                    }).catch(err =>console.log(JSON.stringify(err),'err'))
+                } catch (e) {
+                    console.log(e,'e')
                 }
-            },
-        )
+            }
+        },
+    )
     const HeaderTitle = ({ navigation, isShowHeader }: any) => {
+        const headerColor = theme.dark || (isShowHeader || isShowHeader == undefined) ? theme.colors.text : theme.colors.background
+
         return (
             <Pressable
                 onPress={() => navigation.navigate('Modal')}
@@ -66,14 +88,14 @@ const SearchNavigator: React.FC<Props> = ({ navigation, route }: Props) => {
                     <Text style={{
                         fontSize: 16,
                         fontWeight: 'bold',
-                        color: isShowHeader || isShowHeader == undefined ? theme.colors.text : theme.colors.background,
+                        color: headerColor,
                     }} >
                         {selectedSports?.nameKR ? selectedSports?.nameKR : '취미를 선택해주세요'}
                     </Text>
                     <FontAwesome
                         name="chevron-down"
                         size={16}
-                        color={isShowHeader || isShowHeader == undefined ? theme.colors.text : theme.colors.background}
+                        color={headerColor}
                         style={{ marginLeft: 4 }}
                     />
                 </View>
@@ -106,7 +128,7 @@ const SearchNavigator: React.FC<Props> = ({ navigation, route }: Props) => {
                 component={Show}
                 options={({ navigation, route }: any) => {
                     const isShowHeader = route?.params?.scrollY > 280
-                    const headerTintColor = isShowHeader ? theme.colors.text : theme.colors.background
+                    const headerTintColor = theme.dark || isShowHeader ? theme.colors.text : theme.colors.background
                     return {
                         headerTransparent: true,
                         headerTintColor,
@@ -114,7 +136,7 @@ const SearchNavigator: React.FC<Props> = ({ navigation, route }: Props) => {
                         headerRight: () => (
                             <TouchableOpacity
                                 style={{ marginHorizontal: 12 }}
-                                onPress={() => onEditPostMenu(route.params?.post)}
+                                onPress={() => onPostMenu(route.params?.post)}
                             >
                                 <Entypo name="dots-three-horizontal" size={24} color={headerTintColor} />
                             </TouchableOpacity>

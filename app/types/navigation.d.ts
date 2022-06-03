@@ -4,7 +4,7 @@ import { StackNavigationProp } from '@react-navigation/stack'
 import { BottomTabNavigationProp, BottomTabScreenProps } from '@react-navigation/bottom-tabs'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { Post } from '../components/Card/Posts/PostCard'
-import { Socket } from 'socket.io-client'
+import { ReportPostCategory } from '../screens/Reports/Post/Categories'
 
 export type DrawerNavigatorParams = {
     RootNavigator: RootStackParams,
@@ -13,10 +13,11 @@ export type DrawerNavigatorParams = {
 export type RootStackParams = {
     Root: NavigatorScreenParams<TabNavigatorParams> | undefined,
     NotFound: undefined,
-    Settings: SettingsNavigatorParams,
-    SettingsDetail: ISettings,
+    SettingsNavigator: NavigatorScreenParams<SettingsNavigatorParams>,
     Modal: undefined,
-    Chat: {chat?: any, post?: Post, socket: RefObject<Socket>},
+    Chat: {chat?: any, post?: Post},
+    ReportsNavigator: NavigatorScreenParams<ReportsNavigatorParams>,
+    UserProfile: { userId: number },
 }
 
 export type TabNavigatorParams = {
@@ -57,12 +58,21 @@ BottomTabScreenProps<TabNavigatorParams, Screen>,
 NativeStackScreenProps<RootStackParams>
 >;
 
+export type ReportsNavigatorParams = {
+    Categories: { post: Post },
+    ReportPost: { post: Post, category?: ReportPostCategory },
+    ReportComplete: undefined
+}
+
+
 export type HomeNavigatorParams = {
     Main: {},
 }
 
 export type SettingsNavigatorParams = {
-    Main: {},
+    Account: undefined,
+    ChangePhoneNumber: undefined,
+    Withdrawal: undefined,
 }
 
 export type SearchNavigatorParams = {
