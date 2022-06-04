@@ -1,22 +1,17 @@
-import { NavigationContainer, DefaultTheme, DarkTheme, useTheme } from '@react-navigation/native'
-import React, { RefObject, useEffect } from 'react'
-
-import EditSportsModal from '../screens/EditSportsModal'
-import NotFoundScreen from '../screens/NotFoundScreen'
+import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native'
+import React from 'react'
 import LinkingConfiguration from './LinkingConfiguration'
 import { createDrawerNavigator } from '@react-navigation/drawer'
-import { DrawerNavigatorParams, RootStackParams } from '../types/navigation'
+import { DrawerNavigatorParams } from '../types/navigation'
 import { useRecoilValue } from 'recoil'
 import { isDarkState, loginState } from '../recoil/selectors'
 import DrawerMenu from '../components/DrawerMenu'
 import { StatusBar } from 'expo-status-bar'
 import AuthNavigator from './Auth/AuthNavigator'
-import BottomTabNavigator from './Tab/BottomTabNavigator'
 import theme from '../theme'
-import { Show as Chat } from '../screens/Messages'
 import { ThemeProvider } from 'styled-components/native'
-import { createStackNavigator } from '@react-navigation/stack'
 import { socket, SocketContext } from '../hooks/socket'
+import RootNavigator from './RootNavigator'
 
 const Drawer = createDrawerNavigator<DrawerNavigatorParams>()
 
@@ -58,38 +53,5 @@ export default function Navigation() {
                 </NavigationContainer>
             </ThemeProvider>
         </SocketContext.Provider>
-    )
-}
-
-const Stack = createStackNavigator<RootStackParams>()
-
-function RootNavigator() {
-    const theme = useTheme()
-    return (
-        <Stack.Navigator
-            screenOptions={({ navigation }) => ({
-                headerStyle: {
-                    backgroundColor: theme.colors.background,
-                },
-                headerShadowVisible: false,
-                gestureResponseDistance: 400,
-            })}
-        >
-            <Stack.Screen name="Root" component={BottomTabNavigator} options={{ headerShown: false }} />
-            <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
-            <Stack.Screen name="Chat" component={Chat}/>
-            <Stack.Group screenOptions={{ presentation: 'modal' }}>
-                <Stack.Screen
-                    name="Modal"
-                    component={EditSportsModal}
-                    options={{
-                        headerTitle: '',
-                        headerTransparent: false,
-                        headerStyle: {
-                            backgroundColor: theme.colors.background,
-                        },
-                    }}/>
-            </Stack.Group>
-        </Stack.Navigator>
     )
 }

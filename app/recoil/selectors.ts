@@ -38,4 +38,5 @@ export const isDarkState = atom({
 export const selectedSportsState = atom({
     key: 'selectedSportsState',
     default: null,
+    effects_UNSTABLE: [persistAtom],
 })

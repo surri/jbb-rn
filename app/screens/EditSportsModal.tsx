@@ -35,7 +35,7 @@ export default function EditSportsModal() {
 
     const columnWidth = (Dimensions.get('window').width / 3)
 
-    const [SelectedSports, setSelectedSports] = useRecoilState<any>(selectedSportsState)
+    const [SelectedSports, setSelectedSports] = useRecoilState(selectedSportsState)
 
     const [searchActive, setSearchActive] = useState(false)
 
@@ -73,7 +73,7 @@ export default function EditSportsModal() {
                 ) : item.name == 'football' ? (
                     <Ionicons name="football" size={48} color={selectedColor} />
                 ) : (
-                    null
+                    <FontAwesome name="question-circle" size={48} color={selectedColor} />
                 )}
                 <SportsLabel
                     color={selectedColor}

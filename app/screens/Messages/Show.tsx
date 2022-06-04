@@ -4,7 +4,7 @@ import styled from 'styled-components/native'
 import TextStyles from '../../components/styled/TextStyles'
 import { RouteProp, useIsFocused, useTheme } from '@react-navigation/native'
 import { KeyboardAvoidingView } from '../../components/Themed'
-import { FlatList, Platform, SafeAreaView } from 'react-native'
+import { FlatList, Keyboard, NativeScrollEvent, NativeSyntheticEvent, Platform, SafeAreaView } from 'react-native'
 import { RootStackParams } from '../../types/navigation'
 import { useRecoilValue } from 'recoil'
 import { userState } from '../../recoil/selectors'
@@ -151,6 +151,10 @@ const Show: React.FC<Props> = ({ route, navigation }: Props) => {
         // hasNextPage && setAfter(endCursor)
     }
 
+
+    const [pageY, setPageY] = useState(0)
+    const [startScrollY, setStartScrollY] = useState(0)
+
     return (
         <KeyboardAvoidingView
             style={{ flexGrow: 1 }}
@@ -166,12 +170,23 @@ const Show: React.FC<Props> = ({ route, navigation }: Props) => {
             >
                 <FlatList
                     ref={flatListRef}
-                    keyboardDismissMode='on-drag'
                     contentContainerStyle={{
                         flexGrow: 1,
                         justifyContent: 'flex-end',
                     }}
                     inverted
+                    keyboardShouldPersistTaps='handled'
+                    onTouchStart={(event) => {
+                        setPageY(event.nativeEvent.pageY)
+                    }}
+                    onScrollBeginDrag={(event) => {
+                        setStartScrollY(event.nativeEvent.contentOffset.y)
+                    }}
+                    onScroll={(event) => {
+                        if ( pageY  -1 * ( startScrollY  - event.nativeEvent.contentOffset.y) > 440)  {
+                            Keyboard.dismiss()
+                        }
+                    }}
                     scrollEventThrottle={4}
                     onEndReachedThreshold={0.2}
                     onEndReached={onEndReached}

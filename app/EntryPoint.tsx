@@ -10,6 +10,7 @@ import {
 import client from './config/client'
 import { Text } from './components/Themed'
 import React from 'react'
+import  {  RootSiblingParent  }  from  'react-native-root-siblings'
 
 export default function App() {
     const isLoadingComplete = useCachedResources()
@@ -21,10 +22,12 @@ export default function App() {
             <ApolloProvider client={client}>
                 <SafeAreaProvider>
                     <RecoilRoot>
-                        <React.Suspense fallback={<Text>Loading</Text>}>
-                            <Navigation/>
-                            <StatusBar />
-                        </React.Suspense>
+                        <RootSiblingParent>
+                            <React.Suspense fallback={<Text>Loading</Text>}>
+                                <Navigation/>
+                                <StatusBar />
+                            </React.Suspense>
+                        </RootSiblingParent>
                     </RecoilRoot>
                 </SafeAreaProvider>
             </ApolloProvider>
