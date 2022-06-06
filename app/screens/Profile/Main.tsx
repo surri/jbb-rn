@@ -8,7 +8,6 @@ import { MaterialIcons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import { useProfile } from '../../hooks/graphql/profile'
 import useUpdateProfile from '../../hooks/graphql/profile/useUpdateProfile'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 
 export type Profile = {
     id: string,
@@ -63,10 +62,6 @@ const Main: React.FC = () => {
             <Container
                 bounces={false}
             >
-                <Animated.Image
-                    source={require('../../../assets/images/profile-background-golf.jpg') }
-                    style={{ width, height: 320 }}
-                />
                 <ProfileContainer>
                     <Avatar
                         source={require('../../../assets/images/sample-cat.jpg') }
@@ -162,7 +157,6 @@ const RowCenter = styled(View)`
 const ProfileContainer = styled(View)`
     align-items: center;
     background-color: 'transparents';
-    top: -60px;
 `
 
 const Avatar = styled(Image)`
