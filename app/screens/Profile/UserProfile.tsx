@@ -24,8 +24,6 @@ type Props = {
 const UserProfile: React.FC<Props> = ({ route }: Props) => {
     const { userId } = route.params || {}
 
-    console.log('Profile', userId)
-
     const width = Dimensions.get('window').width
 
     const [profile, setProfile] = useState<Profile>()

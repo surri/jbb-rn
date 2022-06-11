@@ -10,6 +10,7 @@ import { useSetRecoilState } from 'recoil'
 import { loginState, userState } from '../../recoil/selectors'
 import { useAuthNumber } from '../../hooks/graphql/auth'
 import useLogin from '../../hooks/graphql/auth/useLogin'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const JoinContainer = styled.ScrollView`
     flex: 1;
@@ -26,7 +27,6 @@ const Signup: React.FC = () => {
     const [confirmNumber, setConfirmNumber] = useState<string>('')
     const [sended, setSended] = useState<boolean>(false)
     const [timeLimit, setTimeLimit] = useState<number>(0)
-
     const [sendAuthSms] = useAuthNumber()
     const [authNumber , setAuthNumber] = useState<string | null>(null)
 
@@ -47,13 +47,14 @@ const Signup: React.FC = () => {
             setPhone(phoneNumberFormat(phoneNumber))
         }
     }
+
     const sendSms = async () => {
         try {
             await sendAuthSms({ variables: { phone } })
                 .then(({ data }) => setAuthNumber(data.authNumber))
                 .catch(err =>console.log(err))
         } catch (e) {
-            console.log(e,'e')
+            console.log(JSON.stringify(e),'e')
         }
 
         setSended(true)
@@ -123,6 +124,7 @@ const Signup: React.FC = () => {
                 value={phone}
                 onChangeText={text => onChnage(text)}
                 placeholder="전화번호"
+                onSubmitEditing={sendSms}
             />
             <BottomContainer>
                 <PrimaryButton
@@ -146,6 +148,7 @@ const Signup: React.FC = () => {
                         value={confirmNumber}
                         onChangeText={text => setConfirmNumber(text)}
                         placeholder="인증번호"
+                        onSubmitEditing={checkConfirmNumber}
                     />
 
                     <BottomContainer>
