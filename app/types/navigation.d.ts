@@ -100,6 +100,7 @@ export type  AuthNavigatorParams = {
     Login: {},
     ForgotPassword: {},
     Signup: undefined,
+    AuthExistingUser: undefined
     Confirm: {
         phone: string
     }

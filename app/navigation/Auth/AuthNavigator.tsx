@@ -4,6 +4,7 @@ import { AuthNavigatorParams } from '../../types/navigation'
 // import { useSelector } from 'react-redux'
 import { Main, Signup } from '../../screens/Auth'
 import { useTheme } from '@react-navigation/native'
+import AuthExistingUser from '../../screens/Auth/AuthExistingUser'
 // import ForgotPassword from '../screens/ForgotPassword'
 // import { IAuth } from '../store/Auth'
 
@@ -34,6 +35,10 @@ const AuthNavigator: React.FC = () => {
             <AuthStack.Screen
                 name="Signup"
                 component={Signup}
+            />
+            <AuthStack.Screen
+                name="AuthExistingUser"
+                component={AuthExistingUser}
             />
         </AuthStack.Navigator>
     )

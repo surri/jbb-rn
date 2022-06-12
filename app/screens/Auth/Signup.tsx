@@ -11,6 +11,8 @@ import { loginState, userState } from '../../recoil/selectors'
 import { useAuthNumber } from '../../hooks/graphql/auth'
 import useLogin from '../../hooks/graphql/auth/useLogin'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { StackNavigationProp } from '@react-navigation/stack'
+import { AuthNavigatorParams } from '../../types/navigation'
 
 const JoinContainer = styled.ScrollView`
     flex: 1;
@@ -22,7 +24,7 @@ const BottomContainer = styled.View`
 `
 
 const Signup: React.FC = () => {
-    const navigation = useNavigation<any>()
+    const navigation = useNavigation<StackNavigationProp<AuthNavigatorParams>>()
     const [phone, setPhone] = useState<string>('')
     const [confirmNumber, setConfirmNumber] = useState<string>('')
     const [sended, setSended] = useState<boolean>(false)
@@ -68,6 +70,7 @@ const Signup: React.FC = () => {
         try {
             await login({ variables: { phone: phone.replaceAll(' ',''), authNumber } })
                 .then(({ data: { login: data } }) =>{
+                    navigation.navigate('AuthExistingUser')
                     setUser(data)
                     setIsLoggin(true)
                     //set AccessToken && userInfo
@@ -75,6 +78,7 @@ const Signup: React.FC = () => {
                 .catch(err =>console.log(err))
         } catch (e) {
             console.log(e,'e')
+            //todo signup continue
         }
     }
 
