@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler'
 import {
-    registerRootComponent
+    registerRootComponent,
 } from 'expo'
 
 import App from './app/EntryPoint'

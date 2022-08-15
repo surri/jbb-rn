@@ -67,45 +67,51 @@ const HeaderCarouselScrollView = ({ images, childComponents, data, renderItem }:
                                         }),
                                     },
                                 ],
-                                opacity: scrollY.interpolate({
-                                    inputRange: [0, 300, 320],
-                                    outputRange: [1, 0.8, 0],
-                                }),
                             }}
                         >
-                            <Carousel
-                                data={images}
-                                sliderWidth={width}
-                                itemWidth={width}
-                                itemHeight={400}
-                                renderItem={({ item }: any) =>
-                                    <Animated.Image
-                                        source={require('../../assets/images/sample-cat.jpg') }
-                                        style={{ width,height: 400 }}
-                                    />
-                                }
-                                inactiveSlideScale={1}
-                                onSnapToItem={index => setActiveIndex(index)}
-                                removeClippedSubviews={false}
-                            />
-                            <Pagination
-                                dotsLength={images.length}
-                                activeDotIndex={activeIndex}
-                                containerStyle={{
-                                    position: 'absolute',
-                                    bottom: 0,
-                                    right: 0,
+                            <Animated.View
+                                style={{
+                                    flex: 1,
+                                    opacity: scrollY.interpolate({
+                                        inputRange: [0, 300, 320],
+                                        outputRange: [1, 0.8, 0],
+                                    }),
                                 }}
-                                dotStyle={{
-                                    backgroundColor: '#000000',
-                                    marginHorizontal: -4,
-                                }}
-                                inactiveDotStyle={{
-                                    backgroundColor: '#ffffff',
-                                }}
-                                inactiveDotOpacity={1}
-                                inactiveDotScale={1}
-                            />
+                            >
+                                <Carousel
+                                    data={images}
+                                    sliderWidth={width}
+                                    itemWidth={width}
+                                    itemHeight={400}
+                                    renderItem={({ item }: any) =>
+                                        <Animated.Image
+                                            source={require('../../assets/images/sample-cat.jpg') }
+                                            style={{ width,height: 400 }}
+                                        />
+                                    }
+                                    inactiveSlideScale={1}
+                                    onSnapToItem={index => setActiveIndex(index)}
+                                    removeClippedSubviews={false}
+                                />
+                                <Pagination
+                                    dotsLength={images.length}
+                                    activeDotIndex={activeIndex}
+                                    containerStyle={{
+                                        position: 'absolute',
+                                        bottom: 0,
+                                        right: 0,
+                                    }}
+                                    dotStyle={{
+                                        backgroundColor: '#000000',
+                                        marginHorizontal: -4,
+                                    }}
+                                    inactiveDotStyle={{
+                                        backgroundColor: '#ffffff',
+                                    }}
+                                    inactiveDotOpacity={1}
+                                    inactiveDotScale={1}
+                                />
+                            </Animated.View>
                             {childComponents}
                         </Animated.View>
                     </Fragment>

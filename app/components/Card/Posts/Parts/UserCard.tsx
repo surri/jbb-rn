@@ -15,7 +15,6 @@ type Props = {
 const UserCard = ({ user, size }: Props) => {
     const { userId, author } = user || {}
 
-    console.log('UserCard', user)
     const navigation = useNavigation<StackNavigationProp<RootStackParams>>()
     return (
         <Container
